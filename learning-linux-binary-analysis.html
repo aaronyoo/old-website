@@ -4,7 +4,7 @@
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
   <meta name="generator" content="Madoko, version 1.1.6" />
   <meta name="viewport" content="initial-scale=1.0" />
-  <title>Aaron Yoo</title>
+  <title>Review: Learning Linux Binary Analysis</title>
   <style type="text/css"  class="link">
   /*# sourceURL=madoko.css */
   
@@ -292,27 +292,34 @@
 
 <div class="titleblock align-center para-block" style="text-align:center;line-adjust:0">
 <div class="titleheader align-center" style="text-align:center;line-adjust:0">
-<div class="title para-block" style="font-size:xx-large;font-weight:bold;margin-bottom:0.5ex;line-adjust:0">Aaron Yoo</div></div></div><h2 id="sec-writing" class="h1" data-heading-depth="1" style="display:block"><span class="heading-before"><span class="heading-label">1</span>.&#8194;</span>Writing</h2>
-<blockquote>
+<div class="title para-block" style="font-size:xx-large;font-weight:bold;margin-bottom:0.5ex;line-adjust:0">Review: Learning Linux Binary Analysis</div></div></div>
+<p class="p noindent para-continued"><br>
+</p>
+<p class="p indent">In less than 300 pages, Ryan &#8220;elfmaster&#8221; O&#39;Neil provides an approachable introduction to ELF binary hacking.
+</p>
+<p class="p indent">I am going to come right out and say that I really enjoyed this book. If my memory serves me,&nbsp;<a href="https://www.amazon.com/dp/B01891X7V0/ref=dp-kindle-redirect?_encoding=UTF8&amp;btkr=1">Learning Linux Binary Analysis</a> is the first technical book I have ever fully finished. But that accomplishment speaks more to the quality of the book than to my own determination. O&#39;Neil writes with the clear goal of fanning the flames of interest for binary hacking in the reader. Different aspects of ELF Binary hacking are briefly introduced in each of the separate chapters:
+</p>
+<ol class="ol compact">
+<li class="li ol-li compact-li"><strong class="strong-star2">The Linux Environment and Its Tools:</strong> a basic primer on the Linux environment and its tools. This chapter is skippable if you already are familiar with Linux platform and its binary toolchain.
+</li>
+<li class="li ol-li compact-li"><strong class="strong-star2">The ELF Binary Format:</strong> an awesome explanation of the essentials of the ELF binary format. The format is a dry subject so the degree to which the book kept my attention in this section was quite impressive. I recommend reading this chapter several times as it took me a few times to have the importance and effect of each field sink in. The rest of the book is based on this section so spending some extra time here is worth it!
+</li>
+<li class="li ol-li compact-li"><strong class="strong-star2">Linux Process Tracing:</strong> all about how process tracing and ptrace work in Linux. O&#39;Neil also includes a bit on how process tracing can be used for process image reconstruction and code injection. Ptrace anti-debugging is also covered in this chapter.
+</li>
+<li class="li ol-li compact-li"><strong class="strong-star2">ELF Virus Technology — Linux/Unix Viruses:</strong> the most interesting chapter in the whole book. The &#8220;elfmaster&#8221; introduces different type of binary infections and the pros and cons of each. However, he doesn&#39;t stop there. Step by step algorithms and sample code are actually given for some of the infection methods. O&#39;Neil takes on the guise of a virus writer and explains some of the unique engineering challenges that come with infection engineering. His straightforward explanation of these challenges from a software development standpoint is worth reading the book for.
+</li>
+<li class="li ol-li compact-li"><strong class="strong-star2">Linux Binary Protection:</strong> following the most interesting chapter with the second most interesting chapter. O&#39;Neil details the different protection schemes that are possible to protect binaries from analysis. There is an excellent portion of this chapter that talks about how a packer/protector like UPX or Shiva works.
+</li>
+<li class="li ol-li compact-li"><strong class="strong-star2">ELF Binary Forensics in Linux:</strong> a description of the science of binary forensics. I enjoyed this section because it combined Chapters 2 and 4. This chapter is all about training yourself to identify anomalies in the ELF format (Chapter 2) that come about as a result of different types of infection methods (Chapter 4).
+</li>
+<li class="li ol-li compact-li"><strong class="strong-star2">Process Memory Forensics:</strong> about how to analyze a core dump or memory image of a process. Not much to say about this chapter, wasn&#39;t the best, wasn&#39;t the worst.
+</li>
+<li class="li ol-li compact-li"><strong class="strong-star2">ECFS — Extended Core File Snapshot Technology:</strong> a detailed description of ECFS, a system developed by the &#8220;elfmaster&#8221; himself for enabling core files to hold data relevant to binary forensics. Cool to read about but a bit complicated. 
+</li>
+<li class="li ol-li compact-li"><strong class="strong-star2">Linux /proc/kcore Analysis:</strong> the application of what we have learned to the kernel.
+</li></ol>
 
-<p class="p noindent">The heart and soul of good writing is research;
-you should write not what you know but what you
-can find out about.
-&#8195; &#8195; &#8211; Robert J. Sawyer
-</p></blockquote>
-<p class="p noindent"><br>
-
-2019-01-21&nbsp;<a href="ptrace-anti-debug.html">Ptrace Anti-Debug</a>
-<br>
-2019-01-07&nbsp;<a href="learning-linux-binary-analysis.html">Review: Learning Linux Binary Analysis</a>
-<br>
-2018-12-30&nbsp;<a href="breaking-the-vigenere.html">Breaking the Vigenere Cipher</a>
-<br>
-2018-12-13&nbsp;<a href="elf-symbols.html">An Exploration of ELF</a>
-<br>
-2018-11-20&nbsp;<a href="cictro-hash.html">CictroHash and Sponge Construction</a>
-<br>
-2018-10-24&nbsp;<a href="hacking-time.html">CSAW 2015 - Hacking Time</a>
+<p class="p noindent">Most of these chapters cover wide fields of binary study. The type of breadth that can generate a whole book on a single topic. However, O&#39;Neil doesn&#39;t get caught up in too much minutia of each subject. Even when describing his own work (ECFS or any of the code samples throughout the book), the author makes a point to stay grounded in the topic, while encouraging the reader with external resources if they are interested. I appreciate the effort by the author to describe his work simply.
 </p><span data-line=""></span></div>
 </body>
 
