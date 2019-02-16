@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta name="generator" content="Madoko, version 1.1.6" />
+  <meta name="viewport" content="initial-scale=1.0" />
+  <meta name="author" content="Aaron Yoo -- *UCLA Undergraduate*" />
+  <title>Applications of Graph Reduction</title>
+  <style type="text/css"  class="link">
+  /*# sourceURL=madoko.css */
+  
+  .madoko .toc>.tocblock .tocblock .tocblock {
+    margin-left: 2.25em;
+  }
+  .madoko .toc>.tocblock .tocblock {
+    margin-left: 1.5em;
+  }
+  .madoko .toc-contents>.tocblock>.tocitem {
+    font-weight: bold;
+  }
+  .madoko .toc {
+    margin-top: 1em;
+  }
+  .madoko p.para-continue {
+    margin-bottom: 0pt;
+  }
+  .madoko .para-block+p {
+    margin-top: 0pt;
+  }
+  .madoko ul.para-block, .madoko ol.para-block {
+    margin-top: 0pt;
+    margin-bottom: 0pt;
+  }
+  .madoko ul.para-end, .madoko ol.para-end {
+    margin-bottom: 1em;
+  }
+  .madoko dl {
+    margin-left: 0em;
+  }
+  .madoko blockquote {
+    font-style: italic;
+  }
+  .madoko a.localref {
+    text-decoration: none;
+  }
+  .madoko a.localref:hover {
+    text-decoration: underline;
+  }
+  .madoko .footnotes {
+    font-size: smaller;
+    margin-top: 2em;
+  }
+  .madoko .footnotes hr {
+    width: 50%;
+    text-align: left;
+  }
+  .madoko .footnote { 
+    margin-left: 1em;
+  }
+  .madoko .footnote-before {
+    margin-left: -1em;
+    width: 1em;
+    display: inline-block;
+  }
+  .madoko .align-center, .madoko .align-center>p {
+    text-align: center !important;
+  }
+  .madoko .align-center pre {
+    text-align: left;
+  }
+  .madoko .align-center>* {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  .madoko .align-left, .madoko .align-left>p {
+    text-align: left !important;
+  }
+  .madoko .align-left>* {
+    margin-left: 0pt !important;
+    margin-right: auto !important;
+  }
+  .madoko .align-right, .madoko .align-right>p {
+    text-align: right !important;
+  }
+  .madoko .align-right>* {
+    margin-left: auto !important;
+    margin-right: 0pt !important;
+  }
+  .madoko .align-center>table,
+  .madoko .align-left>table,
+  .madoko .align-right>table {
+    text-align: left !important;
+  }
+  .madoko .equation-before {
+    float: right;
+  }
+  .madoko .bibitem {
+    font-size: smaller;
+  }
+  .madoko .bibsearch {
+    font-size: x-small;
+    text-decoration:none;
+    color: black;
+    font-family: "Segoe UI Symbol", Symbola, serif;
+  }
+  .madoko .block, .madoko .figure, .madoko .bibitem, .madoko .equation, .madoko div.math {
+    margin-top: 1ex;
+    margin-bottom: 1ex;
+  }
+  .madoko .figure {
+    padding: 0.5em;
+    margin-left: 0pt;
+    margin-right: 0pt;
+  }
+  .madoko .hidden {
+    display: none;
+  }
+  .madoko .invisible {
+    visibility: hidden;
+  }
+  .madoko.preview .invisible {
+    visibility: visible;
+    opacity: 0.5;
+  }
+  .madoko code.code, .madoko span.code {
+    white-space: pre-wrap;
+  }
+  .madoko hr, hr.madoko {
+    border: none;
+    border-bottom: black solid 1px;
+    margin-bottom: 0.5ex;
+  }
+  .madoko .framed>*:first-child {
+    margin-top: 0pt;
+  }
+  .madoko .framed>*:last-child {
+    margin-bottom: 0pt;
+  }
+  .madoko ul.list-style-type-dash {
+      list-style-type: none !important;
+  }
+  .madoko ul.list-style-type-dash > li:before {
+      content: "\2013"; 
+      position: absolute;
+      margin-left: -1em; 
+  }
+  .madoko table.madoko {
+    border-collapse: collapse;
+  }
+  .madoko td, .madoko th {
+    padding: 0ex 0.5ex;
+    margin: 0pt;
+    vertical-align: top;
+  }
+  .madoko .cell-border-left {
+    border-left: 1px solid black;
+  }
+  .madoko .cell-border-right {
+    border-right: 1px solid black;
+  }
+  .madoko thead>tr:first-child>.cell-line,
+  .madoko tbody:first-child>tr:first-child>.cell-line {
+    border-top: 1px solid black;
+    border-bottom: none;
+  }
+  .madoko .cell-line, .madoko .cell-double-line {
+    border-bottom: 1px solid black;
+    border-top: none;
+  }
+  .madoko .cell-double-line {
+    border-top: 1px solid black;
+    padding-top: 1.5px !important;
+  }
+  .madoko .input-mathpre .MathJax_Display {
+    text-align: left !important;
+  }
+  .madoko div.input-mathpre {
+    text-align: left;
+    margin-top: 1.5ex;
+    margin-bottom: 1ex;
+  }
+  .madoko .math-rendering {
+    text-align: left;
+    white-space: pre;
+    color: gray;
+  }
+  .madoko .mathdisplay {
+    text-align: center;
+  }
+  .madoko .pretty table {
+    border-collapse: collapse;
+  }
+  .madoko .pretty td {
+    padding: 0em;
+  }
+  .madoko .pretty td.empty {
+    min-width: 1.5ex;
+  }
+  .madoko .pretty td.expander {
+    width: 100em;
+  }
+  body.madoko, .madoko .serif {
+    font-family: Cambria,"Times New Roman","Liberation Serif","Times",serif;
+  }
+  .madoko .sans-serif {
+    font-family: "Calibri", "Optima", sans-serif;
+  }
+  .madoko .symbol {
+    font-family: "Segoe UI Symbol", Symbola, serif;
+  }
+  body.madoko {  
+    -webkit-text-size-adjust: 100%;       
+    text-rendering: optimizeLegibility;
+  }
+  body.madoko {
+    max-width: 88ex; 
+    margin: 1em auto;
+    padding: 0em 2em;  
+  }
+  body.preview.madoko {
+    padding: 0em 1em;
+  }
+  .madoko p {
+    text-align: justify;
+  }
+  .madoko h1, .madoko h2, .madoko h3, .madoko h4 { 
+    margin-top: 1.22em; 
+    margin-bottom: 1ex;
+  }
+  .madoko h1+p, .madoko h2+p, .madoko h3+p, .madoko h4+p, .madoko h5+p  { 
+    margin-top: 1ex;    
+  }
+  .madoko h5, .madoko h6 { 
+    margin-top: 1ex;
+    font-size: 1em;
+  }
+  .madoko h5 { 
+    margin-bottom: 0.5ex;
+  }
+  .madoko h5 + p {
+    margin-top: 0.5ex;
+  }
+  .madoko h6 { 
+    margin-bottom: 0pt;
+  }
+  .madoko h6 + p {
+    margin-top: 0pt;
+  }
+  .madoko pre, .madoko code, .madoko kbd, .madoko samp, .madoko tt, 
+  .madoko .monospace, .madoko .token-indent, .madoko .reveal pre, .madoko .reveal code, .madoko .email {
+    font-family: Consolas,"Andale Mono WT","Andale Mono",Lucida Console,Monaco,monospace,monospace;
+    font-size: 0.85em;
+  }
+  .madoko pre code, .madoko .token-indent {
+    font-size: 0.95em;
+  }
+  .madoko pre code {
+    font-family: inherit !important;
+  }
+  .madoko ol.linenums li {
+    background-color: white;
+    list-style-type: decimal;
+  }
+  .madoko .remote {
+    background-color: #F0FFF0;
+  }
+  .madoko .remote + * {
+    margin-top: 0pt;
+  }
+  @media print {
+    body.madoko {
+      font-size: 10pt;
+    }
+    @page {
+      margin: 1in 1.5in;
+    }
+  }
+  @media only screen and (max-device-width:1024px) {
+    body.madoko {
+      padding: 0em 0.5em;    
+    }
+    .madoko li {
+      text-align: left;
+    }
+  }
+  
+    </style>
+  
+  </head>
+<body class="madoko">
+
+<div class="body madoko" style="line-adjust:0">
+
+<div class="titleblock align-center para-block" style="text-align:center;line-adjust:0">
+<div class="titleheader align-center" style="text-align:center;line-adjust:0">
+<div class="title para-block" style="font-size:xx-large;font-weight:bold;margin-bottom:0.5ex;line-adjust:0">Applications of Graph Reduction</div></div>
+<div class="authors align-center" style="text-align:center;width:80%;line-adjust:0"><table class="authorrow columns block" style="margin-top:2ex;width:100%;line-adjust:0">
+<tbody><tr><td class="author column" style="text-align:center;line-adjust:0">
+<div class="authorname" style="font-size:large;line-adjust:0">Aaron Yoo &#8211; <em class="em-star1">UCLA Undergraduate</em></div></td></tr></tbody></table></div></div><span data-line=""></span>
+<nav class="toc toc-contents"><h2 id="sec-contents" class="clearnum h1 heading-contents" data-heading-depth="1" style="display:block">Contents</h2>
+<div class="tocblock tocblock1">
+<div class="tocitem tocitem1" data-toc-target-elem="h1" data-toc-target="sec-introduction" data-toc-depth="1" data-toc-line="[1]{.heading-label}.&#8194;Introduction" style="toctarget:sec-introduction"><a href="#sec-introduction" class="localref"><span class="heading-label">1</span>.&#8194;Introduction</a></div>
+<div class="tocblock tocblock2">
+<div class="tocitem tocitem2" data-toc-target-elem="h2" data-toc-target="sec-background" data-toc-depth="2" data-toc-line="[1.1]{.heading-label}.&#8194;Background" style="toctarget:sec-background"><a href="#sec-background" class="localref"><span class="heading-label">1.1</span>.&#8194;Background</a></div>
+<div class="tocitem tocitem2" data-toc-target-elem="h2" data-toc-target="sec-problem" data-toc-depth="2" data-toc-line="[1.2]{.heading-label}.&#8194;Problem" style="toctarget:sec-problem"><a href="#sec-problem" class="localref"><span class="heading-label">1.2</span>.&#8194;Problem</a></div></div>
+<div class="tocitem tocitem1" data-toc-target-elem="h1" data-toc-target="sec-union-find" data-toc-depth="1" data-toc-line="[2]{.heading-label}.&#8194;Union Find" style="toctarget:sec-union-find"><a href="#sec-union-find" class="localref"><span class="heading-label">2</span>.&#8194;Union Find</a></div>
+<div class="tocblock tocblock2">
+<div class="tocitem tocitem2" data-toc-target-elem="h2" data-toc-target="sec-description" data-toc-depth="2" data-toc-line="[2.1]{.heading-label}.&#8194;Description" style="toctarget:sec-description"><a href="#sec-description" class="localref"><span class="heading-label">2.1</span>.&#8194;Description</a></div>
+<div class="tocitem tocitem2" data-toc-target-elem="h2" data-toc-target="sec-operations" data-toc-depth="2" data-toc-line="[2.2]{.heading-label}.&#8194;Operations" style="toctarget:sec-operations"><a href="#sec-operations" class="localref"><span class="heading-label">2.2</span>.&#8194;Operations</a></div>
+<div class="tocblock tocblock3">
+<div class="tocitem tocitem3" data-toc-target-elem="h3" data-toc-target="sec-makeset" data-toc-depth="3" data-toc-line="[2.2.1]{.heading-label}.&#8194;MakeSet" style="toctarget:sec-makeset"><a href="#sec-makeset" class="localref"><span class="heading-label">2.2.1</span>.&#8194;MakeSet</a></div>
+<div class="tocitem tocitem3" data-toc-target-elem="h3" data-toc-target="sec-find" data-toc-depth="3" data-toc-line="[2.2.2]{.heading-label}.&#8194;Find" style="toctarget:sec-find"><a href="#sec-find" class="localref"><span class="heading-label">2.2.2</span>.&#8194;Find</a></div></div>
+<div class="tocitem tocitem2" data-toc-target-elem="h2" data-toc-target="sec-implementation" data-toc-depth="2" data-toc-line="[2.3]{.heading-label}.&#8194;Implementation" style="toctarget:sec-implementation"><a href="#sec-implementation" class="localref"><span class="heading-label">2.3</span>.&#8194;Implementation</a></div></div>
+<div class="tocitem tocitem1" data-toc-target-elem="h1" data-toc-target="sec-references" data-toc-depth="1" data-toc-line="References" style="toctarget:sec-references"><a href="#sec-references" class="localref">References</a></div></div></nav><h2 id="sec-introduction" class="h1" data-heading-depth="1" style="display:block"><span class="heading-before"><span class="heading-label">1</span>.&#8194;</span>Introduction</h2><h3 id="sec-background" class="h2" data-heading-depth="2" style="display:block"><span class="heading-before"><span class="heading-label">1.1</span>.&#8194;</span>Background</h3>
+<p class="p noindent">One of the more recent advances in network verification, introduced by Microsoft Research and Plotkin,
+is using graph reduction to speed up the resolution of reachability queries between nodes<span class="citations" style="target-element:bibitem">[<a href="#plotkin:2016:snv:2914770.2837657" title="Scaling Network Verification Using Symmetry and Surgery
+Plotkin, Bj&#248;rner, Lopes, Rybalchenko, and Varghese, 2016" class="bibref localref" style="target-element:bibitem"><span class="cite-number">3</span></a>]</span>. In this case, the edges of the graph are the links
+between network nodes and performing reduction based on equivalence classes simplifies the
+network topology, making future operations on this topology easier. Plotkin&#39;s network graph reduction
+uses the disjoint-set (Union-Find) data structure as a way to determine membership of an equivalence
+class in linear time. But the Union-Find structure itself isn&#39;t too novel and was introduced by Galler in
+ 1964<span class="citations" style="target-element:bibitem">[<a href="#galler:1964:iea:364099.364331" title="An Improved Equivalence Algorithm
+Galler and Fisher, 1964" class="bibref localref" style="target-element:bibitem"><span class="cite-number">1</span></a>]</span>. The application of this algorithm to graph reduction followed soon
+ after.
+</p><h3 id="sec-problem" class="h2" data-heading-depth="2" style="display:block"><span class="heading-before"><span class="heading-label">1.2</span>.&#8194;</span>Problem</h3>
+<p class="p noindent">In light of my recent exposure to Plotkin&#39;s work through my Network Verification class, I wanted to
+further explore the Union-Find data structure and it&#39;s application to reduction problems. Union-Find
+is applicable to problems that exhibit symmetry. Take Plotkin&#39;s network reduction as an example, the
+routers in the network exhibit a lot of redundancy (and thus symmetry) in their routing rules and locations in the network topology. This symmetry
+allows the establishment of equivalence classes. But at a more general level, this symmetry is caused by consistent design patterns.
+There are many other fields where design patterns are consistent in this way. One field where this is possibly applicable is reverse engineering.
+Since compilers output code following mostly predictable patterns, it may be possible to perform dead code elimination or
+deobfuscate obfuscated paths automatically. In summary, this tutorial aims to:
+</p>
+<ol class="ol compact">
+<li class="li ol-li compact-li">Provide an intuition about the Union Find Disjoint Set data structure by introducing its operations and theoretical background, then solving several classical problems.
+</li>
+<li class="li ol-li compact-li">Explore the possible application of graph reduction and Union-Find to binaries using Binary Ninja&#39;s&nbsp;<a href="https://docs.binary.ninja/dev/bnil-llil/index.html">Intermediate Language</a>.
+</li></ol>
+<h2 id="sec-union-find" class="h1" data-heading-depth="1" style="display:block"><span class="heading-before"><span class="heading-label">2</span>.&#8194;</span>Union Find</h2><h3 id="sec-description" class="h2" data-heading-depth="2" style="display:block"><span class="heading-before"><span class="heading-label">2.1</span>.&#8194;</span>Description</h3>
+<p class="p noindent">Union-Find Disjoint Set (UFDS) is a data structure that models disjoint sets. These sets are sometimes interpreted as equivalence classes. The nice thing about
+UFDS is that it is able to determine which set an item belongs to in amortized <svg  class="math-inline math-render-svg math" style="vertical-align:-0.2930em;height:1.0879em;width:2.2066em" viewBox='34.67 54.164 21.015 10.361' ><desc>$O(1)$</desc><g id='math-5e079a'><use x='34.869' xlink:href='#g0-79' y='61.836'/><use x='42.745' xlink:href='#g1-40' y='61.836'/><use x='46.62' xlink:href='#g1-49' y='61.836'/><use x='51.601' xlink:href='#g1-41' y='61.836'/></g></svg> time. UFDS can be applied to any problem that needs to model disjoint
+equivalence classes and test for membership quickly. One classical problem that can be solved with UFDS is finding connected components in a graph.
+</p>
+<p class="p indent">Note that testing for membership is not supported efficiently by other data structures. The most similar structure in C++ STL is a <code class="code code1">set</code>, which does not support efficient
+testing for membership of disjoint sets. A <code class="code code1">vector</code> of <code class="code code1">sets</code> provides the same functionality in <svg  class="math-inline math-render-svg math" style="vertical-align:-0.2930em;height:1.0879em;width:5.1291em" viewBox='88.468 54.164 48.849 10.361' ><desc>$O(nlog(n))$</desc><g id='math-ef9521'><use x='88.667' xlink:href='#g0-79' y='61.836'/><use x='96.544' xlink:href='#g1-40' y='61.836'/><use x='100.418' xlink:href='#g0-110' y='61.836'/><use x='106.398' xlink:href='#g0-108' y='61.836'/><use x='109.567' xlink:href='#g0-111' y='61.836'/><use x='114.396' xlink:href='#g0-103' y='61.836'/><use x='119.505' xlink:href='#g1-40' y='61.836'/><use x='123.379' xlink:href='#g0-110' y='61.836'/><use x='129.359' xlink:href='#g1-41' y='61.836'/><use x='133.234' xlink:href='#g1-41' y='61.836'/></g></svg> time by iterating through the vector and checking
+for membership in each of the sets which is typically an <svg  class="math-inline math-render-svg math" style="vertical-align:-0.2930em;height:1.0879em;width:4.5012em" viewBox='34.67 54.164 42.869 10.361' ><desc>$O(log(n))$</desc><g id='math-afd1d2'><use x='34.869' xlink:href='#g0-79' y='61.836'/><use x='42.745' xlink:href='#g1-40' y='61.836'/><use x='46.62' xlink:href='#g0-108' y='61.836'/><use x='49.788' xlink:href='#g0-111' y='61.836'/><use x='54.617' xlink:href='#g0-103' y='61.836'/><use x='59.727' xlink:href='#g1-40' y='61.836'/><use x='63.601' xlink:href='#g0-110' y='61.836'/><use x='69.581' xlink:href='#g1-41' y='61.836'/><use x='73.455' xlink:href='#g1-41' y='61.836'/></g></svg> operation.
+</p>
+<p class="p indent">UFDS is implemented by keeping track of the parent of each item. This can be done simply by an array. If the parent of the element is the element itself, then the element
+is a representative item (the item that represents the equivalence class). In other words, the element is a representative element if and only if <code class="code code1">parent(element) == element</code>.
+If this is not true, then we need to recursively visit the parent until the condition holds true to obtain the representative element. The representative elements are the roots
+of trees in which the leaves are elements in the same class as the representative element. Put simply, each disjoint set is a tree and UFDS is a forest of these trees.
+</p>
+<p class="p indent">Lastly, there is the notion of <em class="em-low1">rank</em>, an upper bound on the distance of a node away from the root (representative). The main function of rank is to provide a heuristic
+used when taking the union of two sets. When taking the union of two sets (trees) it is best to keep them as short as possible .
+</p><h3 id="sec-operations" class="h2" data-heading-depth="2" style="display:block"><span class="heading-before"><span class="heading-label">2.2</span>.&#8194;</span>Operations</h3>
+<p class="p noindent">Like any data structure, UFDS is only as valuable as the efficient operations that it supports. The names of some of these operations are not standardized but they will
+be referenced as described below:
+</p><h4 id="sec-makeset" class="h3" data-heading-depth="3" style="display:block"><span class="heading-before"><span class="heading-label">2.2.1</span>.&#8194;</span>MakeSet</h4>
+<p class="p noindent">We need the ability to make a disjoint set. Initializing a set requires 1 element. <code class="code code1">MakeSet</code> creates a new disjoint set with <code class="code code1">rank = 0</code> and parent pointer
+pointing to itself (signaling that it is the root of the tree). Put another way, <code class="code code1">MakeSet</code> allows us to create a set with the single element as the representative
+element.
+</p><h4 id="sec-find" class="h3" data-heading-depth="3" style="display:block"><span class="heading-before"><span class="heading-label">2.2.2</span>.&#8194;</span>Find</h4>
+<p class="p noindent">We also need the ability to find 
+</p><h3 id="sec-implementation" class="h2" data-heading-depth="2" style="display:block"><span class="heading-before"><span class="heading-label">2.3</span>.&#8194;</span>Implementation</h3>
+<p class="p noindent">Here is a quick implementation from Steven and Felix Hamlin<span class="citations" style="target-element:bibitem">[<a href="#halim2013competitive" title="Competitive Programming 3: The New Lower Bound of Programming Contests
+Halim and Halim, 2013" class="bibref localref" style="target-element:bibitem"><span class="cite-number">2</span></a>]</span>:
+</p>
+<pre class="para-block pre-fenced pre-fenced3 language-cpp lang-cpp cpp colorized" style="display:block"><code><span style="color:navy">#</span><span style="color:navy">include</span><span style="color:maroon"> &lt;iostream&gt;</span>
+<span style="color:darkgreen">// Put some more stuff here</span></code></pre>
+<p class="p noindent para-continued">&#8230;// unfinished
+</p>
+<div class="bibl" style="bbl-file:out/Path Compression-bib.bbl.mdk"><h2 id="sec-references" class="clearnum h1 heading-references" data-heading-depth="1" style="display:block">References</h2>
+<div class="bibliography bib-numeric" data-hanging-indent="0" data-cite-style="numeric:&#39;[&#39;,&#39;]&#39;,&#39;, &#39;" data-style="madoko-numeric" style="bibstyle:madoko-numeric">
+<div id="galler:1964:iea:364099.364331" class="bibitem" data-cite-year="1964" data-cite-authors="Galler and Fisher" data-cite-authors-long="Galler and Fisher" data-cite-label="1" data-line="2837657.bib:21" style="text-indent:-2rem;margin-left:2rem;searchterm:An%20Improved%20Equivalence%20Algorithm%20Galler%20and%20Fisher%2C%201964;spellcheck:false;bibitem-label:\5C [1\5C ]"><span class="bibitem-before" style="padding-right:0.5em;display: inline-block; width:calc(2rem - 0.5em);display: inline-block; text-align:right;font-size:90%">[1]</span>Bernard A.&#160;Galler, and Michael J.&#160;Fisher. &#8220;An Improved Equivalence Algorithm.&#8221; <em class="em-low1">Commun. ACM</em> 7 (5). ACM, New York, NY, USA: 301–303. May 1964. doi:<a href="https://dx.doi.org/10.1145/364099.364331" class="bib-doi" style="font-size:smaller">10.1145/364099.364331</a>.&nbsp;<a href="http://www.bing.com/search?q=An%20Improved%20Equivalence%20Algorithm%20Galler%20and%20Fisher%2C%201964" class="bibsearch">&#128270;</a></div>
+<div id="halim2013competitive" class="bibitem" data-cite-year="2013" data-cite-authors="Halim and Halim" data-cite-authors-long="Halim and Halim" data-cite-label="2" data-line="2837657.bib:40" style="text-indent:-2rem;margin-left:2rem;searchterm:Competitive%20Programming%203%3A%20The%20New%20Lower%20Bound%20of%20Programming%20Contests%20Halim%20and%20Halim%2C%202013;spellcheck:false;bibitem-label:\5C [2\5C ]"><span class="bibitem-before" style="padding-right:0.5em;display: inline-block; width:calc(2rem - 0.5em);display: inline-block; text-align:right;font-size:90%">[2]</span>S.&#160;Halim, and F.&#160;Halim. <em class="em-low1">Competitive Programming 3: The New Lower Bound of Programming Contests</em>. v. 3. Lulu.com. 2013. <a href="https://books.google.com/books?id=vUc-nwEACAAJ" class="bib-url texturl monospace">https://&#8203;books.&#8203;google.&#8203;com/&#8203;books?&#8203;id=&#8203;vUc-&#8203;nwEACAAJ</a>.&nbsp;<a href="http://www.bing.com/search?q=Competitive%20Programming%203%3A%20The%20New%20Lower%20Bound%20of%20Programming%20Contests%20Halim%20and%20Halim%2C%202013" class="bibsearch">&#128270;</a></div>
+<div id="plotkin:2016:snv:2914770.2837657" class="bibitem" data-cite-year="2016" data-cite-authors="Plotkin et al." data-cite-authors-long="Plotkin, Bj&#248;rner, Lopes, Rybalchenko, and Varghese" data-cite-label="3" data-line="2837657.bib:1" style="text-indent:-2rem;margin-left:2rem;searchterm:Scaling%20Network%20Verification%20Using%20Symmetry%20and%20Surgery%20Plotkin%2C%20Bj%26oslash%3Brner%2C%20Lopes%2C%20Rybalchenko%2C%20and%20Varghese%2C%202016;spellcheck:false;bibitem-label:\5C [3\5C ]"><span class="bibitem-before" style="padding-right:0.5em;display: inline-block; width:calc(2rem - 0.5em);display: inline-block; text-align:right;font-size:90%">[3]</span>Gordon D.&#160;Plotkin, Nikolaj Bj&#248;rner, Nuno P.&#160;Lopes, Andrey Rybalchenko, and George Varghese. &#8220;Scaling Network Verification Using Symmetry and Surgery.&#8221; <em class="em-low1">SIGPLAN Not.</em> 51 (1). ACM, New York, NY, USA: 69–83. Jan. 2016. doi:<a href="https://dx.doi.org/10.1145/2914770.2837657" class="bib-doi" style="font-size:smaller">10.1145/2914770.2837657</a>.&nbsp;<a href="http://www.bing.com/search?q=Scaling%20Network%20Verification%20Using%20Symmetry%20and%20Surgery%20Plotkin%2C%20Bj%26oslash%3Brner%2C%20Lopes%2C%20Rybalchenko%2C%20and%20Varghese%2C%202016" class="bibsearch">&#128270;</a></div></div></div><span data-line=""></span></div>
+<svg id='math-svg-paths' style='display:none' version='1.1' viewBox='0 0 0 0' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
+<defs>
+<path d='M7.372 -4.344C7.372 -5.948 6.316 -7.024 4.832 -7.024C2.68 -7.024 0.488 -4.762 0.488 -2.441C0.488 -0.787 1.604 0.219 3.039 0.219C5.151 0.219 7.372 -1.963 7.372 -4.344ZM3.098 -0.04C2.112 -0.04 1.415 -0.847 1.415 -2.162C1.415 -2.6 1.554 -4.055 2.321 -5.22C3.009 -6.257 3.985 -6.775 4.772 -6.775C5.589 -6.775 6.486 -6.217 6.486 -4.732C6.486 -4.015 6.217 -2.461 5.23 -1.235C4.752 -0.628 3.935 -0.04 3.098 -0.04Z' id='g0-79'/>
+<path d='M3.298 2.391C3.298 2.361 3.298 2.341 3.128 2.172C1.883 0.917 1.564 -0.966 1.564 -2.491C1.564 -4.224 1.943 -5.958 3.168 -7.203C3.298 -7.323 3.298 -7.342 3.298 -7.372C3.298 -7.442 3.258 -7.472 3.198 -7.472C3.098 -7.472 2.202 -6.795 1.614 -5.529C1.106 -4.433 0.986 -3.328 0.986 -2.491C0.986 -1.714 1.096 -0.508 1.644 0.618C2.242 1.843 3.098 2.491 3.198 2.491C3.258 2.491 3.298 2.461 3.298 2.391Z' id='g1-40'/>
+<path d='M2.879 -2.491C2.879 -3.268 2.77 -4.473 2.222 -5.599C1.624 -6.824 0.767 -7.472 0.667 -7.472C0.608 -7.472 0.568 -7.432 0.568 -7.372C0.568 -7.342 0.568 -7.323 0.757 -7.143C1.733 -6.157 2.301 -4.573 2.301 -2.491C2.301 -0.787 1.933 0.966 0.697 2.222C0.568 2.341 0.568 2.361 0.568 2.391C0.568 2.451 0.608 2.491 0.667 2.491C0.767 2.491 1.664 1.813 2.252 0.548C2.76 -0.548 2.879 -1.654 2.879 -2.491Z' id='g1-41'/>
+<path d='M2.929 -6.376C2.929 -6.615 2.929 -6.635 2.7 -6.635C2.082 -5.998 1.205 -5.998 0.887 -5.998V-5.689C1.086 -5.689 1.674 -5.689 2.192 -5.948V-0.787C2.192 -0.428 2.162 -0.309 1.265 -0.309H0.946V0C1.295 -0.03 2.162 -0.03 2.56 -0.03S3.826 -0.03 4.174 0V-0.309H3.856C2.959 -0.309 2.929 -0.418 2.929 -0.787V-6.376Z' id='g1-49'/>
+<path d='M4.692 -3.756C4.702 -3.816 4.722 -3.866 4.722 -3.935C4.722 -4.105 4.603 -4.204 4.433 -4.204C4.334 -4.204 4.065 -4.134 4.025 -3.776C3.846 -4.144 3.497 -4.403 3.098 -4.403C1.963 -4.403 0.727 -3.009 0.727 -1.574C0.727 -0.588 1.335 0 2.052 0C2.64 0 3.108 -0.468 3.208 -0.578L3.218 -0.568C3.009 0.319 2.889 0.727 2.889 0.747C2.849 0.837 2.511 1.823 1.455 1.823C1.265 1.823 0.936 1.813 0.658 1.724C0.956 1.634 1.066 1.375 1.066 1.205C1.066 1.046 0.956 0.857 0.687 0.857C0.468 0.857 0.149 1.036 0.149 1.435C0.149 1.843 0.518 2.042 1.474 2.042C2.72 2.042 3.437 1.265 3.587 0.667L4.692 -3.756ZM3.397 -1.275C3.337 -1.016 3.108 -0.767 2.889 -0.578C2.68 -0.399 2.371 -0.219 2.082 -0.219C1.584 -0.219 1.435 -0.737 1.435 -1.136C1.435 -1.614 1.724 -2.79 1.993 -3.298C2.262 -3.786 2.69 -4.184 3.108 -4.184C3.766 -4.184 3.905 -3.377 3.905 -3.328S3.885 -3.218 3.875 -3.178L3.397 -1.275Z' id='g0-103'/>
+<path d='M2.57 -6.804C2.57 -6.814 2.57 -6.914 2.441 -6.914C2.212 -6.914 1.484 -6.834 1.225 -6.814C1.146 -6.804 1.036 -6.795 1.036 -6.605C1.036 -6.496 1.136 -6.496 1.285 -6.496C1.763 -6.496 1.773 -6.406 1.773 -6.326L1.743 -6.127L0.488 -1.146C0.458 -1.036 0.438 -0.966 0.438 -0.807C0.438 -0.239 0.877 0.11 1.345 0.11C1.674 0.11 1.923 -0.09 2.092 -0.448C2.271 -0.827 2.391 -1.405 2.391 -1.425C2.391 -1.524 2.301 -1.524 2.271 -1.524C2.172 -1.524 2.162 -1.484 2.132 -1.345C1.963 -0.697 1.773 -0.11 1.375 -0.11C1.076 -0.11 1.076 -0.428 1.076 -0.568C1.076 -0.807 1.086 -0.857 1.136 -1.046L2.57 -6.804Z' id='g0-108'/>
+<path d='M0.877 -0.588C0.847 -0.438 0.787 -0.209 0.787 -0.159C0.787 0.02 0.927 0.11 1.076 0.11C1.196 0.11 1.375 0.03 1.445 -0.169C1.455 -0.189 1.574 -0.658 1.634 -0.907L1.853 -1.803C1.913 -2.022 1.973 -2.242 2.022 -2.471C2.062 -2.64 2.142 -2.929 2.152 -2.969C2.301 -3.278 2.829 -4.184 3.776 -4.184C4.224 -4.184 4.314 -3.816 4.314 -3.487C4.314 -2.869 3.826 -1.594 3.666 -1.166C3.577 -0.936 3.567 -0.817 3.567 -0.707C3.567 -0.239 3.915 0.11 4.384 0.11C5.32 0.11 5.689 -1.345 5.689 -1.425C5.689 -1.524 5.599 -1.524 5.569 -1.524C5.469 -1.524 5.469 -1.494 5.42 -1.345C5.22 -0.667 4.892 -0.11 4.403 -0.11C4.234 -0.11 4.164 -0.209 4.164 -0.438C4.164 -0.687 4.254 -0.927 4.344 -1.146C4.533 -1.674 4.951 -2.77 4.951 -3.337C4.951 -4.005 4.523 -4.403 3.806 -4.403C2.909 -4.403 2.421 -3.766 2.252 -3.537C2.202 -4.095 1.793 -4.403 1.335 -4.403S0.687 -4.015 0.588 -3.836C0.428 -3.497 0.289 -2.909 0.289 -2.869C0.289 -2.77 0.389 -2.77 0.408 -2.77C0.508 -2.77 0.518 -2.78 0.578 -2.999C0.747 -3.706 0.946 -4.184 1.305 -4.184C1.504 -4.184 1.614 -4.055 1.614 -3.726C1.614 -3.517 1.584 -3.407 1.455 -2.889L0.877 -0.588Z' id='g0-110'/>
+<path d='M4.672 -2.72C4.672 -3.756 3.975 -4.403 3.078 -4.403C1.743 -4.403 0.408 -2.989 0.408 -1.574C0.408 -0.588 1.076 0.11 2.002 0.11C3.328 0.11 4.672 -1.265 4.672 -2.72ZM2.012 -0.11C1.584 -0.11 1.146 -0.418 1.146 -1.196C1.146 -1.684 1.405 -2.76 1.724 -3.268C2.222 -4.035 2.79 -4.184 3.068 -4.184C3.646 -4.184 3.945 -3.706 3.945 -3.108C3.945 -2.72 3.746 -1.674 3.367 -1.026C3.019 -0.448 2.471 -0.11 2.012 -0.11Z' id='g0-111'/>
+</defs>
+</svg>
+
+</body>
+
+</html>
