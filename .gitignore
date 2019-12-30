@@ -1,1 +1,5 @@
+# Ignore MacOS system files
 .DS_Store
+
+# Ignore madoko output directory
+out/

@@ -298,7 +298,28 @@
 <div class="title para-block" style="font-size:xx-large;font-weight:bold;margin-bottom:0.5ex;line-adjust:0">A First Attempt at Virtual Memory Management</div></div>
 <div class="authors align-center" style="text-align:center;width:80%;line-adjust:0"><table class="authorrow columns block" style="margin-top:2ex;width:100%;line-adjust:0">
 <tbody><tr><td class="author column" style="text-align:center;line-adjust:0">
-<div class="authorname" style="font-size:large;line-adjust:0">Aaron Yoo</div></td></tr></tbody></table></div></div><span data-line=""></span>
+<div class="authorname" style="font-size:large;line-adjust:0">Aaron
+Yoo</div></td></tr></tbody></table></div></div><span data-line=""></span>
+<p class="p noindent">ATTENTION, THE INFORMATION CONTAINED IN THIS BLOG POST IS
+DEPRECATED AND INCORRECT. While well intentioned, my thoughts were horribly misguided in my
+approach to virtual memory management. Many of the things that I do in this blog
+post are only made correct by the fact that I was using identity mapping for my
+kernel. Upon revisiting my kernel project and using a higher half kernel (which
+prevented me from doing identity mapping) I discovered many glaring problems
+with my thought process in this blog post. The most simple and obvious of which
+is: how do you access/change the page tables once you turn on virtual memory? My
+answer in this post relied on identity mapping. Since the entire kernel was
+identity mapped you could access the page tables at their virtual address.
+However, when you don't identity map the problem gets much more difficult. In
+this case, I needed to use the "recursive page table" trick, where the last
+entry in the page directory points to it self. Long story short, this trick
+maps, certain virtual addesses to indicies in the page table, making it possible
+to access the page directory, and thus page tables, using a virtual address.
+While this is one problem, it serves as a microcosm for my misunderstanding in
+this article. I choose to leave it up however, as I don't believe in trying to erase
+your mistakes. TLDR... don't use the information in this article unless its for
+comedic relief or you have an identity mapped kernel.
+</p>
 <nav class="toc toc-contents"><h2 id="sec-contents" class="clearnum h1 heading-contents" data-heading-depth="1" style="display:block">Contents</h2>
 <div class="tocblock tocblock1">
 <div class="tocitem tocitem1" data-toc-target-elem="h1" data-toc-target="sec-introduction" data-toc-depth="1" data-toc-line="[1]{.heading-label}.&#8194;Introduction" style="toctarget:sec-introduction"><a href="#sec-introduction" class="localref"><span class="heading-label">1</span>.&#8194;Introduction</a></div>

